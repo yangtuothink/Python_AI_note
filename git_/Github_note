@@ -29,3 +29,6 @@ GitHub 使用
                 在 github 的 setting 中的 SSH and GEG keys 里面添加
 
 
+ git pull --rebase origin master
+
+
