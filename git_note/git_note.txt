@@ -39,12 +39,6 @@ git 空间
     |#######--------#######----------#######---|--------|--########  |
     |------------------------------------------|        |------------|
 
-
-    |          --①->           ---②-->         |
-    |        -----------③------------>         |
-    |
-    --------------------------------------------        --------------
-
     工作区    项目所在操作目录, 项目操作区域
     暂存区    用于记录工作区的工作(修改)内容
     仓库      将记录内容备份
@@ -63,7 +57,7 @@ git 初始化配置
             git config [选项]
             配置文件: 项目目录/.git/config
             * 要求必须在项目下执行
-        * 顺序 项目>当前用户>所有用户
+            * 顺序 项目>当前用户>所有用户
     配置用户名(必须要配置)
         sudo git config --system user.name yangtuo
         执行位置    任何位置
@@ -97,9 +91,9 @@ git 初始化配置
             core.editor=vscode
             tarena@tedu:~/git$
 
-git 操作
+git 操作基本操作
 
-初始化仓库
+1. 初始化仓库
     初始化命令   git init
     实例
         tarena@tedu:~/git$ git init
@@ -109,10 +103,11 @@ git 操作
         将某个项目目录, 变为 git 操作目录, 生成 git 本地仓库
         该目录即可使用 git 进行管理
 
-查看分支状态
+2. 查看分支状态
     git status
     说明
-      git              本地计算机                           他人计算器
+      git
+                    本地计算机                              他人计算器
     |------------------------------------------|        |------------|
     | 工作区          暂存区            仓库     |        |  远程仓库   |
     |#######        #######          #######   |        |  ########  |
@@ -125,25 +120,26 @@ git 操作
     |                                    --------push--------->      |
     |   <------------------------pull--------------------------      |
     |                                    <----fetch/clone------      |
-    -----------------------------------------------------------------|
+    |----------------------------------------------------------------|
+
         初始默认分支为 master
         当工作区和仓库 不一致的时候, 会有所提示
 
-将工作区内容记录到暂存区
+3. 将工作区内容记录到暂存区
     git add files
     git add file1, file2
-    git add *
+    git add .
 
-将暂存区的内容返
+4. 取消文件暂存记录
     git rm --cached file
 
-    将暂存区内容同步到仓库
+5. 将暂存区内容同步到仓库
         git commit -m 'add some files'
         说明
             每次同步都需要添加同步信息
             commit 操作只能同步暂存区已经记录的内容
 
-查看历史版本
+6. 查看 commit 日志
     详细查看
         tarena@tedu:~/git$ git log
         commit 3f8c95ebeb0998f9f4de793ceb856827a5da27fc
@@ -159,78 +155,80 @@ git 操作
         9bcdb97cae7082b59b532c817b1e08e8cde3ec9a add some files
         tarena@tedu:~/git$
 
-文件比较
+7. 文件比较
     git diff [file]
+    说明
+        用于比较工作区文件和仓库文件差异
 
-丢弃工作区的修改
+8. 丢弃工作区的修改
     git checkout -- file
 
-从仓库恢复文件
+9. 从仓库恢复文件
     git checkout file
 
-移动 / 删除 文件并提交缓存
+10. 移动 / 删除 文件并提交缓存
     git mv [file] [path]
     git rm [file]
 
 版本控制
-    退回到上一个的 commit 节点
+    1. 退回到上一个的 commit 节点
     git reset --hard HEAD^
     说明
         HEAD 是 commit 指针
         一个 ^ 代表后退一个
         通常不会写太多, 最多两个三个而已
 
-    去往指定的 commit 操作节点
+    2. 去往指定的 commit 操作节点
     git reset --hard [commit_id]
     说明
         commit_id 不需要全写, 前7位就够了
         去往指定的节点后, 在此节点后的所有版本会无法查看
         可以通过 git reflog 来全部查看
 
-    查看所有的日志
+    3. 查看所有的历史
     git reflog
     说明
         利用该操作,可以去往任意的历史位置
 
-    标签
-        标签创建
+标签
+    标签创建
         git tag[名称] -m [message]
         说明
             标签  在工作的重要位置添加的快照, 保存当时的工作状态
                     一般用于版本迭代等
             注意  message 可以不写, 但是最好添加
 
-        查看所有标签
+    查看所有标签
         git tag
 
-        将标签 给指定的 commit_id 添加
+    将标签 给指定的 commit_id 添加
         git tag [tag_name] [commit_id] -m [message]
 
-        查看标签详细信息
+    查看标签详细信息
         git show [tag]
 
-        删除标签
+    删除标签
         git tag -d [tag_name]
 
-        去往某个标签节点
+    去往某个标签节点
         git reset --hard[tag]
 
 临时工作区
-    创建临时保存工作区
+    1. 创建临时保存工作区
     git stash
         说明
             让工作区回到修改前状态
             并且修改保存在一个临时工作区
 
-    查看临时工作区列表
+    2. 查看临时工作区列表
     git stash list
         说明
             最新的工作区记录为 stash{0} 依次排列
 
-    将临时应用到工作区
+    3. 将临时应用到工作区
     git stash apply stash@{2}
 
-    将临时工作区删除
+    4. 将临时工作区删除
     git stash drop [stash]  删除一个
     git stash clear     删除所有
 
@@ -239,20 +237,20 @@ git 操作
     多人开发建立分支优点: 安全, 不影响其他分支, 独立控制进度
 
 分支操作命令
-    查看分支情况
+    1. 查看分支情况
         git branch
         说明  前面 * 的表示当前工作分支
-    创建新的分支
+    2. 创建新的分支
         git branch [branch]
-    切换分支
+    3. 切换分支
         git checkout [branch]
-    合并分支
+    4. 合并分支
         git merge [branch]
         说明
-            合并时会产生冲突 需要手动修改
-            在合并操作中尽量添加新的模块 不要手动修改原有代码内容
-            在
-    删除分支
+            表示将某个基于当前分支建立的分支，合并过来
+            合并分支过程中可能产生冲突，需要手动解决
+            在分支操作中尽量添加新的模块，不要修改原有代码内容
+    5. 删除分支
         git branch -d [branch]
         说明
             未合并的分支是无法用 -d 删除的( 防手滑,防恶意手滑 )
@@ -266,39 +264,46 @@ git 操作
         git 分布式结构衍生了很多工作模式 共享仓库是常用的模式之一
         普通隐藏的 .git 仓库不能被其他主机获取代码 共享仓库即可以将 git 项目共享的仓库
 创建远程仓库
-    创建
+    1. 创建
         mkdir yangtuo_git
         chown tarena:tarena yangtuo_git
-    初始化该目录为 git 仓库, 设置 bare 属性
+    2. 初始化该目录为 git 仓库, 设置 bare 属性
         cd gitrepo/
         git init --bare yangtuo.git
         说明
             yangtuo  项目名称    .git 习惯后缀
-    将配置 git 目录设置为 和共享仓库目录相同的属主
+    3. 将配置 git 目录设置为 和共享仓库目录相同的属主
         chown -R tarena:tarena yangtuo.git
-    添加远程仓库
+添加项目到共享仓库
+    1. 创建共享仓库连接
         git remote add origin tarena@127.0.0.1:/home/tarena/yangtuo_git/yangtuo.git
-        说明
-            该操作要在本地的一个 git 项目中执行
-            与远程连接默认使用 SSH 方法
-            origin 是给远程主机起的名字
-    删除远程主机
+            说明
+                该操作要在本地的一个 git 项目中执行
+                与远程连接默认使用 SSH 方法
+                origin 是给远程主机起的名字
+    2. 删除远程主机
         git remote rm [origin]
         注意
             连接多个远程主机的时候 远程名字不能重复
-    将本地分支推送到远程共享仓库
+
+    3. 将本地分支推送到远程共享仓库
         git push -u [origin] [branch]
+        git push -f origin master
         注意
             -u 表示建立对应分支自动关联 一般首次向远程推送某个分支时使用
             git branch -a 查看链接的远程分支
+            -f 本地强制上传到远程，把远程的覆盖
 
-    获取远程仓库项目
+    4. 获取远程仓库项目
         git clone tarena@172.40.91.185:/home/tarena/gitrepe/tedu.git
-    从远程获取最新代码
+    5. 从远程获取最新代码
         git pull
+        git pull --rebase origin master
         注意
             clone 已经自动建立了关联, pull 可以直接拉取代码到对应分支
-    从远程获取最新内容到本地
+            --rebase 拉取远程的文件把本地的覆盖
+
+    6. 从远程获取最新内容到本地
         git fetch
         注意
             制霸远程分支拿来 并不在合并
@@ -306,10 +311,11 @@ git 操作
         git fetch origin master:tmp
             可以改拉取过来之后的分支名字
 
-推送其他内容
-    推送标签
-        git push [origin] [tag]
-    推送落后版本
-        git push --force origin
-        当当前版本落后于远程版本 无法更新时使用
+    7. 推送其他内容
+
+        推送标签
+            git push [origin] [tag]
+        推送落后版本
+            git push --force origin
+            当当前版本落后于远程版本 无法更新时使用
 

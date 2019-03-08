@@ -1,0 +1,35 @@
+GitHub 使用
+    介绍
+        github 是一个开源项目社区网站, 拥有全球最多的开源项目
+        开发者可以注册网站在 github 上建立自己的项目仓库
+
+    网址
+        github.com
+
+    指定代码管理工具
+        git
+
+    获取开源项目
+        1. 通过左上角 search 查找有意向的项目
+        2. 根据查找结果 选择某个项目进入项目页面
+        3. 左上角赋值地址 git clone 或者 直接 download
+
+    删除仓库
+        1. 选择想要删除的自己的仓库
+        2. 右上角settings 最后部分 点击delete
+        3. 正确输入仓库名删除之
+
+    连接方式选择
+        使用 https 方式连接
+            每次都要输入用户名密码
+        使用 ssh 方式连接
+            每次上传不需要用户名密码
+            但是需要提前将固定的主机设置成信任 添加 ssh 秘钥
+            设置方法
+                在 linux 下使用 ssh-keygen 命令生成秘钥, 秘钥默认存放在 /home/tarena/.ssh/ 路径下
+                复制该路径下的id_rsa.pub内容
+                github账号 右上角下拉选择settings，左侧SSH and GPG keys，new ssh key，添加复制的公钥内容，添加
+
+
+
+
