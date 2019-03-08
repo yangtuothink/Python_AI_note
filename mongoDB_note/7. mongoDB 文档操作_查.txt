@@ -1,0 +1,386 @@
+查找文档
+    db.collection.find(query,field)
+    参数:
+        query 查找条件
+            格式: {ssss:"xxx"}是一个键值对构成的文档
+            如果是空, 表示查找所有内容
+        field 查找的域
+            格式: {ssss:"xxx"}是一个键值对构成的文档
+            设置值:
+                设置为1 表示查找该域,其他自动为 0
+                设置为0 表示不查找该域,其他自动为 1
+                设置的时候要不全部为 1 或者全部 为 0 是不能混搭的
+                _id 域如果没写使用被选中,不会受其他影响
+                _id:0 才可以不显示
+                如果是空, 表示查找所有域
+    返回值: 返回查找到的所有文档
+    ps:
+        query 参数不传递,是无法传递 field 参数的
+        如果无 query 参数,且使用 field 参数则需要 query 设置成 {} 即可
+
+    实例:
+        查询所有含有  age:18 键值对的文档
+        输入: > db.class0.find({age:18})
+        输出:
+            { "_id" : ObjectId("5c76550eb9330b7c15210101"), "name" : "tuo", "age" : 18, "sex" : "man" }
+            { "_id" : ObjectId("5c765554b9330b7c15210102"), "name" : "jlsajdla", "age" : 18, "sex" : "man" }
+
+        查找所有文档,仅显示 name,age 字段
+        输入: > db.class0.find({},{_id:0,name:1,age:1})
+        输出:
+            { "name" : "yang", "age" : 16 }
+            { "name" : "tuo", "age" : 18 }
+            { "age" : 18 }
+            { "age" : 18 }
+
+    查找首行文档
+        db.collection.findOne(query,field)
+        查找第一条符合条件的文档
+        参数用法同 find
+        返回值同 find
+
+    查询实例合集:
+            > db.class0.find()
+            { "_id" : ObjectId("5c765408b9330b7c15210100"), "name" : "yang", "age" : 16 }
+            { "_id" : ObjectId("5c76550eb9330b7c15210101"), "name" : "tuo", "age" : 18, "sex" : "man" }
+            { "_id" : ObjectId("5c765554b9330b7c15210102"), "Null" : "tuo", "age" : 18, "sex" : "man" }
+            { "_id" : ObjectId("5c765568b9330b7c15210103"), "null" : "tuo", "age" : 18, "sex" : "man" }
+            { "_id" : 1, "name" : "tuo", "age" : 18, "sex" : "man" }
+            { "_id" : 2, "name" : "tuo", "age" : 18, "sex" : "man" }
+            { "_id" : 3, "name" : "4tuo", "age" : 418, "sex" : "man" }
+            { "_id" : 4, "name" : "hjsdj", "age" : 18 }
+            { "_id" : ObjectId("5c765918b9330b7c15210104"), "name" : "4tuo", "age" : 418, "sex" : "man" }
+            { "_id" : ObjectId("5c765918b9330b7c15210105"), "name" : "hjsdj", "age" : 18 }
+            { "_id" : ObjectId("5c76592db9330b7c15210106"), "name" : "jj", "age" : 18 }
+            { "_id" : ObjectId("5c765a8ab9330b7c15210107"), "name" : "ub", "age" : 88, "sex" : "man" }
+
+            > db.class0.find({name:"tuo"},{_id:0,sex:1})
+            { "sex" : "man" }
+            { "sex" : "man" }
+            { "sex" : "man" }
+
+            > db.class0.find({name:"tuo"},{_id:0,sex:1,age:1})
+            { "age" : 18, "sex" : "man" }
+            { "age" : 18, "sex" : "man" }
+            { "age" : 18, "sex" : "man" }
+
+            > db.class0.find({name:"tuo"},{_id:0,sex:1,age:0})
+            Error: error: {
+                "ok" : 0,
+                "errmsg" : "Projection cannot have a mix of inclusion and exclusion.",
+                "code" : 2,
+                "codeName" : "BadValue"
+            }
+            >
+
+            > db.class0.find({},{_id:0,sex:1,age:1})
+            { "age" : 16 }
+            { "age" : 18, "sex" : "man" }
+            { "age" : 18, "sex" : "man" }
+            { "age" : 18, "sex" : "man" }
+            { "age" : 18, "sex" : "man" }
+            { "age" : 18, "sex" : "man" }
+            { "age" : 418, "sex" : "man" }
+            { "age" : 18 }
+            { "age" : 418, "sex" : "man" }
+            { "age" : 18 }
+            { "age" : 18 }
+            { "age" : 88, "sex" : "man" }
+            >
+
+            > db.class0.findOne({},{_id:0,sex:1,age:1})
+            { "age" : 16 }
+            >
+
+query 操作符
+    定义: MongoDB 中使用 $ 符号注明的有特殊意义的字符串,用于表达丰富的含义
+    格式: {name{$eq:17}} 形同 {name:17}
+    使用位置: query 位置
+
+范围/比较运算操作符
+
+    $eq     等于
+    $lt     小于
+    $lte    小于等于
+    $gt     大于
+    $gte    大于等于
+    $ne     不等于
+
+        {age:{$gt:17,$lt:20}} 可以多个条件并列, 以 and 的关系.
+
+    操作实例:
+        age < 18
+        > db.class0.find({age:{$lt:18}})
+
+        age > 18
+        > db.class0.find({age:{$gt:18}})
+
+        age = 18
+        > db.class0.find({age:{$eq:18}})
+
+        name > y
+        > db.class0.find({name:{$gt:"y"}})
+
+        15 < age < 20
+        > db.class0.find({age:{$gt:15,$lt:20}})
+
+        age >= 18
+        > db.class0.find({age:{$gte:18}})
+
+        age <= 18
+        > db.class0.find({age:{$lte:18}})
+
+        age != / <> 18
+        > db.class0.find({age:{$ne:18}})
+
+
+    $in     包含
+        $in:[]
+        > db.class0.find({age:{$in:[1,16,18]}})
+
+
+    $nin    不包含
+        $in:[]
+        > db.class0.find({age:{$nin:[1,16,18]}})
+        { "_id" : 3, "name" : "4tuo", "age" : 418, "sex" : "man" }
+        { "_id" : ObjectId("5c765918b9330b7c15210104"), "name" : "4tuo", "age" : 418, "sex" : "man" }
+        { "_id" : ObjectId("5c765a8ab9330b7c15210107"), "name" : "ub", "age" : 88, "sex" : "man" }
+        >
+
+逻辑操作符
+    $and    与,且
+        {$and[{},{}]}  形同 {{},{}}
+        默认 多个键值对的 , 隔开表示 and 的关系
+
+        获取 年级大于18 且 性别为男的文档
+        > db.class0.find({$and:[{age:{$gt:18}},{sex:"man"}]},{_id:0})
+
+        获取 年级大于18 且 性别为男的文档
+        > db.class0.find({age:{$gt:18}},{sex:"man"},{_id:0})
+
+
+    $or     或
+        用法类似 $and
+        关系为 或 ,多条件满足其一即可
+
+        获取 年纪小于18 或者 性别为男的文档
+        > db.class0.find({$or:[{age:{$lt:18}},{sex:"man"}]},{_id:0})
+
+    $not    非
+        {$not:{...}}
+        单目运算也可以
+        其后不能跟值,要跟一个条件 比如 {$not:{$lt:18}} 不大于 18
+
+        获取 性别 不是 男性 的文档
+        > db.class0.find({sex:{$not:{$eq:"man"}}})
+
+
+    $nor   亦或(既不,也不)
+        not (A or B)
+        A,B 全都是假才可以是真
+
+        获取既不是 男性 又不大于18岁 的文档
+        > db.class0.find({$nor:[{age:{$lt:18}},{sex:"man"}]},{_id:0})
+
+
+
+    混合语句
+
+        年龄大于18 或者小于17 并且 性别为男
+        > db.class0.find({$or:[{age:{$gt:18}},{age:{$lt:17}}],sex:"man"},{_id:0})
+        { "name" : "4tuo", "age" : 418, "sex" : "man" }
+        { "name" : "4tuo", "age" : 418, "sex" : "man" }
+        { "name" : "ub", "age" : 88, "sex" : "man" }
+
+        年龄大于17 的男生 或者 姓名叫做 yang 或者 tuo
+        > db.class0.find({$or:[{name:"yang"},{name:"tuo"}],sex:"man",age:{$gt:17}},{_id:0})
+        { "name" : "tuo", "age" : 18, "sex" : "man" }
+        { "name" : "tuo", "age" : 18, "sex" : "man" }
+        { "name" : "tuo", "age" : 18, "sex" : "man" }
+
+
+数组操作符
+    数组: 一组数据的有序集合,用[]表示
+
+    查询的时候会把只要满足任意条件的都拿出来
+
+        含有 18 就算
+        > db.class.find({score:18},{_id:0})
+        { "name" : "yy", "age" : 8, "score" : [ 56, 18, 75 ] }
+
+        有一个超过 60 就算
+        > db.class.find({score:{$gt:60}},{_id:0})
+        { "name" : "yang", "age" : 6, "score" : [ 98, 56, 32 ] }
+        { "name" : "tuo", "age" : 9, "score" : [ 82, 56, 81 ] }
+        { "name" : "yy", "age" : 8, "score" : [ 56, 18, 75 ] }
+
+
+    $all    满足所有条件
+        必须包含 82 和 81
+        > db.class.find({score:{$all:[82,81]}},{_id:0})
+        { "name" : "tuo", "age" : 9, "score" : [ 82, 56, 81 ] }
+
+    $size   数组长度
+        取出数组长度为 2 的文档
+        > db.class.find({score:{$size:2}},{_id:0})
+        { "name" : "zz", "age" : 8, "score" : [ 55, 78 ] }
+
+    $slice
+        用于 filed 参数
+        单数值表示显示数组的前几项
+        列表传入两个值 表示显示数组的起点,以及起点后几项
+
+        取出数组前两项
+        > db.class.find({},{_id:0,score:{$slice:2}})
+
+        从数组第一项往后取两项,不包括第一项
+        > db.class.find({},{_id:0,score:{$slice:[1,2]}})
+
+        从数组的第三项往后取两项,不包括第三项
+        > db.class.find({},{_id:0,score:{$slice:[3,2]}})
+        { "name" : "yang", "age" : 6, "score" : [ ] }
+
+
+
+其他操作符
+    $exists     判断域是否存在
+        取出不含有 score 域的文档
+        > db.class.find({score:{$exists:false}},{_id:0})
+
+        取出含有 score 域的文档
+        > db.class.find({score:{$exists:true}},{_id:0})
+
+
+    $mod        除数,余数搜索
+        找 age 为偶数 的文档
+        > db.class.find({age:{$mod:[2,0]}},{_id:0})
+        找age 为奇数 的文档
+        > db.class.find({age:{$mod:[2,1]}},{_id:0})
+
+
+    $type       根据类型查找
+        查找的数值为 类型的标识数字
+        > db.class.find({name:{$type:2}},{_id:1})
+        { "_id" : ObjectId("5c775857c69c81d07212f58a") }
+        { "_id" : ObjectId("5c775887c69c81d07212f58b") }
+        { "_id" : ObjectId("5c7758e8c69c81d07212f58c") }
+        { "_id" : ObjectId("5c775b82bed69fac33334adf") }
+        { "_id" : ObjectId("5c777ad1bed69fac33334ae0") }
+
+        虽然 score 里面是个数组,但是find 查询的时候取出来的不是数组整体而是里面的值
+        因此除非 score:[[1,2,3],4,5] 这样值里面还有数组才可以被命中.
+        仅仅是 score:[1,2,3,4,5] 这样取出来的其实只是 1,2,3,4,5 这样的数字
+
+        按理说查找 16 的 32bit-int 数字, 但是依旧查不到
+        其实本质上因为操作系统的转换自动帮你转换成了 浮点型,因此使用 1 才可以查到
+        > db.class.find({score:{$type:4}},{_id:1})
+        >
+        > db.class.find({score:{$type:16}},{_id:1})
+        >
+        > db.class.find({score:{$type:1}},{_id:1})
+        { "_id" : ObjectId("5c775857c69c81d07212f58a") }
+        { "_id" : ObjectId("5c775887c69c81d07212f58b") }
+        { "_id" : ObjectId("5c7758e8c69c81d07212f58c") }
+        { "_id" : ObjectId("5c775b82bed69fac33334adf") }
+        >
+
+    遇到其他的 操作符不会的可以在官网查看说明进行学习使用
+        https://docs.mongodb.com/manual/reference/operator/query/type/index.html
+
+数据操作函数
+
+distinct(field)
+    db.collection.distinct(field)
+    功能: 获取某个集合中某个域的值范围
+    参数: 域名
+    返回值: 获取范围数组(去重的)
+
+        查看 age 域 有哪些值
+        > db.class.distinct("age")
+        [ 6, 9, 8, 18 ]
+
+        > db.class.distinct("score")
+        [ 32, 56, 98, 81, 82, 18, 75, 55, 78 ]
+
+pretty()
+    功能: 将find查找结果格式化显示,每个域单行显示,
+    没什么太多实际意义了
+     > db.class.find().pretty()
+        {
+            "_id" : ObjectId("5c775857c69c81d07212f58a"),
+            "name" : "yang",
+            "age" : 6,
+            "score" : [
+                98,
+                56,
+                32
+            ]
+        }
+        ...
+limit(n)
+    功能: 显示查询结果的前几项
+    参数: n 指定显示数量
+
+        查看所有数据的前三条
+        > db.class.find({},{_id:0}).limit(3)
+        { "name" : "yang", "age" : 6, "score" : [ 98, 56, 32 ] }
+        { "name" : "tuo", "age" : 9, "score" : [ 82, 56, 81 ] }
+        { "name" : "yy", "age" : 8, "score" : [ 56, 18, 75 ] }
+        >
+
+skip(n)
+    功能: 跳过查询结果的前几个,显示后面的
+    参数: n 跳过个数
+        > db.class.find({},{_id:0})
+        { "name" : "yang", "age" : 6, "score" : [ 98, 56, 32 ] }
+        { "name" : "tuo", "age" : 9, "score" : [ 82, 56, 81 ] }
+        { "name" : "yy", "age" : 8, "score" : [ 56, 18, 75 ] }
+        { "name" : "zz", "age" : 8, "score" : [ 55, 78 ] }
+        { "name" : "pp", "age" : 18 }
+        查询所有文档, 跳过前三个
+        > db.class.find({},{_id:0}).skip(3)
+        { "name" : "zz", "age" : 8, "score" : [ 55, 78 ] }
+        { "name" : "pp", "age" : 18 }
+
+count()
+    功能: 统计查询结果
+
+    > db.class.find({},{_id:0}).count()
+    5
+    ps: 给出查找条件的时候就是准的,有时候不给条件的时候就有时候会不精准
+
+sort({field:1/-1})
+    功能: 排序
+    参数: field 排序的域 , 1 升序, 2 降序
+        > db.class.find({},{_id:0}).sort({age:1})
+        { "name" : "yang", "age" : 6, "score" : [ 98, 56, 32 ] }
+        { "name" : "yy", "age" : 8, "score" : [ 56, 18, 75 ] }
+        { "name" : "zz", "age" : 8, "score" : [ 55, 78 ] }
+        { "name" : "tuo", "age" : 9, "score" : [ 82, 56, 81 ] }
+        { "name" : "pp", "age" : 18 }
+        > db.class.find({},{_id:0}).sort({age:-1})
+        { "name" : "pp", "age" : 18 }
+        { "name" : "tuo", "age" : 9, "score" : [ 82, 56, 81 ] }
+        { "name" : "yy", "age" : 8, "score" : [ 56, 18, 75 ] }
+        { "name" : "zz", "age" : 8, "score" : [ 55, 78 ] }
+        { "name" : "yang", "age" : 6, "score" : [ 98, 56, 32 ] }
+        >
+
+        也可以复合排序, 先按照 age 排序, 如果相同, 按照 name 排序
+        > db.class.find({},{_id:0}).sort({age:-1},{name:-1})
+
+通过连续调用函数获取精确结果
+    只要你返回的是文档集合(count 就不行), 理论上你就可以无限调用下去
+        > db.class.find({},{_id:0}).limit(5).skip(3).sort({age:1}).pretty()
+        { "name" : "tuo", "age" : 9, "score" : [ 82, 56, 81 ] }
+        { "name" : "pp", "age" : 18 }
+
+
+通过序列号直接查找序列号的某一项
+    索引序号的方式直接获取某一项文档
+        > db.class.find({},{_id:0}).limit(5).skip(3).sort({age:1}).pretty()
+        { "name" : "tuo", "age" : 9, "score" : [ 82, 56, 81 ] }
+        { "name" : "pp", "age" : 18 }
+        > db.class.find({},{_id:0}).limit(5).skip(3).sort({age:1}).pretty()[1]
+        { "name" : "pp", "age" : 18 }
+        >

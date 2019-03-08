@@ -1,0 +1,95 @@
+聚合操作
+
+概念: 对文档进行数据整理和统计
+
+聚合函数
+    db.collection.aggregate()
+    功能: 完成聚合操作, 获取操作数据
+    参数: 聚合条件, 配合聚合操作符使用
+
+聚合操作符
+    $group
+        db.class.aggregate({$group:{_id:"$域名",随意的名字用于显示:{$统计操作符:取值}}})
+        分组聚合    需要配合一定的统计操作符
+
+统计操作符
+    统计求和:   $sum
+        > db.class.aggregate({$group:{_id:"$sex",num:{$sum:1}}})
+        { "_id" : "g", "num" : 2 }
+        { "_id" : "b", "num" : 1 }
+        { "_id" : null, "num" : 13 }
+
+        按照 性别分组 后计算 age 的综合
+        > db.class.aggregate({$group:{_id:"$sex",Age:{$sum:"$age"}}})
+        { "_id" : "g", "Age" : 36 }
+        { "_id" : "b", "Age" : 75 }
+
+    求平均数    $avg
+        > db.class1.aggregate({$group:{_id:"$sex",Avg:{$avg:"$age"}}})
+        { "_id" : "g", "Avg" : 26.666666666666668 }
+        { "_id" : "b", "Avg" : 41.333333333333336 }
+
+    求最大值 / 最小值     $max / $min
+        > db.class1.aggregate({$group:{_id:"$sex",mum:{$max:"$age"}}})
+        { "_id" : "g", "mum" : 36 }
+        { "_id" : "b", "mum" : 78 }
+
+        > db.class1.aggregate({$group:{_id:"$sex",mum:{$min:"$age"}}})
+        { "_id" : "g", "mum" : 18 }
+        { "_id" : "b", "mum" : 18 }
+
+    求第一个 / 最后一个值    $first / $last
+        按照 性别 分组后, 新增 mum 列,  内容为 age 域的第一个值
+        > db.class1.aggregate({$group:{_id:"$sex",mum:{$first:"$age"}}})
+        { "_id" : "g", "mum" : 18 }
+        { "_id" : "b", "mum" : 18 }
+
+        按照 性别 分组后, 新增 mum 列,  内容为 age 域的最后一个值
+        > db.class1.aggregate({$group:{_id:"$sex",mum:{$last:"$age"}}})
+        { "_id" : "g", "mum" : 36 }
+        { "_id" : "b", "mum" : 78 }
+        >
+
+    获取指定域的集合文档数据    $project
+        只显示 name , age 域
+        > db.class1.aggregate({$project:{_id:0,name:1,age:1}})
+        { "name" : "aa", "age" : 18 }
+        { "name" : "bb", "age" : 28 }
+        { "name" : "cc", "age" : 78 }
+        { "name" : "dd", "age" : 18 }
+        { "name" : "ee", "age" : 26 }
+        { "name" : "ff", "age" : 36 }
+        >
+
+        只显示 name , age 域, 且 重命名为 Name 和 Age
+        > db.class1.aggregate({$project:{_id:0,Name:"$name",Age:"$age"}})
+        { "Name" : "aa", "Age" : 18 }
+        { "Name" : "bb", "Age" : 28 }
+        { "Name" : "cc", "Age" : 78 }
+        { "Name" : "dd", "Age" : 18 }
+        { "Name" : "ee", "Age" : 26 }
+        { "Name" : "ff", "Age" : 36 }
+
+    数据筛选 $match
+        $match 值 写法同 query 参数
+        筛选年龄大于等于 20 的文档
+        > db.class1.aggregate({$match:{age:{$gt:20}}})
+
+    显示前几条 $limit
+        显示前三条文档
+        > db.class1.aggregate({$limit:3})
+
+    跳过前几条文档显示后面内容  $skip
+        跳过前3条显示后面内容
+        > db.class1.aggregate({$skip:3})
+
+    排序  $sort
+        将集合文档按照年龄升序排序
+        > db.class1.aggregate({sort:{age:1}})
+
+聚合管道
+    定义: 将多个聚合操作合并在一起完成.即将上一个聚合的操作结果作为下一个聚合的操作对象,直到所有的操作完成
+    > db.class1.aggregate([{},{},{}}
+
+    按照年龄排序后, 不显示 _id
+    > db.class1.aggregate([{$sort:{age:1}},{$project:{_id:0}}])

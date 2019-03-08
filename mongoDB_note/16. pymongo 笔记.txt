@@ -1,0 +1,251 @@
+python 操作 mongoDB
+    模块 pymongo
+    安装方法:   sudo pip3 install pymongo
+    操作步骤:
+        1. 创建数据库连接对象
+            conn = pymonge.MomgoClient("localhost",27017)
+        2. 生成操作的数据库对象
+            db = conn.stu
+        3. 生成集合对象
+            myset = db.class0
+        4. 通过 集合对象 调用结构完成数据操作
+        5. 关闭数据库连接
+            db.close()
+
+ ['_BaseObject__codec_options',
+ '_BaseObject__read_concern',
+ '_BaseObject__read_preference',
+ '_BaseObject__write_concern',
+ '_Collection__create',
+ '_Collection__create_index',
+ '_Collection__database',
+ '_Collection__find_and_modify',
+ '_Collection__full_name',
+ '_Collection__name',
+ '_Collection__write_response_codec_options',
+ '__call__',
+ '__class__',
+ '__delattr__',
+ '__dict__',
+ '__dir__',
+ '__doc__',
+ '__eq__',
+ '__format__',
+ '__ge__',
+ '__getattr__',
+ '__getattribute__',
+ '__getitem__',
+ '__gt__',
+ '__hash__',
+ '__init__',
+ '__iter__',
+ '__le__',
+ '__lt__',
+ '__module__',
+ '__ne__',
+ '__new__',
+ '__next__',
+ '__reduce__',
+ '__reduce_ex__',
+ '__repr__',
+ '__setattr__',
+ '__sizeof__',
+ '__str__',
+ '__subclasshook__',
+ '__weakref__',
+ '_command',
+ '_count',
+ '_delete',
+ '_insert',
+ '_insert_one',
+ '_legacy_write',
+ '_socket_for_primary_reads',
+ '_socket_for_reads',
+ '_socket_for_writes',
+ '_update',
+ 'aggregate',
+ 'bulk_write',
+ 'codec_options',
+ 'count',
+ 'create_index',
+ 'create_indexes',
+ 'database',
+ 'delete_many',
+ 'delete_one',
+ 'distinct',
+ 'drop',
+ 'drop_index',
+ 'drop_indexes',
+ 'ensure_index',
+ 'find',
+ 'find_and_modify',
+ 'find_one',
+ 'find_one_and_delete',
+ 'find_one_and_replace',
+ 'find_one_and_update',
+ 'full_name',
+ 'group',
+ 'index_information',
+ 'initialize_ordered_bulk_op',
+ 'initialize_unordered_bulk_op',
+ 'inline_map_reduce',
+ 'insert',
+ 'insert_many',
+ 'insert_one',
+ 'list_indexes',
+ 'map_reduce',
+ 'name',
+ 'next',
+ 'options',
+ 'parallel_scan',
+ 'read_concern',
+ 'read_preference',
+ 'reindex',
+ 'remove',
+ 'rename',
+ 'replace_one',
+ 'save',
+ 'update',
+ 'update_many',
+ 'update_one',
+ 'with_options',
+ 'write_concern']
+
+    插入文档:
+        insert_many     插入多条
+        insert_one      插入一条
+        insert          插入一条或多条
+        save            保存文档
+            myset.insert_one({"name":"张铁林","King":"乾隆"})
+
+            myset.insert_many([{"name":"张国立","King":"康熙"}, {"name":"陈道明","King":"康熙"}])
+
+            myset.insert({"name":"唐国强","King":"雍正"})
+            myset.insert([{"name":"陈建斌","King":"雍正"}, {"_id":1, "name":"吴奇隆","King":"四爷"}])
+
+            myset.save({"_id":1,"name":"聂远","King":"乾隆"})
+
+    查找文档:
+        find        查找所有
+        find_one    查找首个
+
+        find(query,field)
+            参数形式    同 mongoshell 中的 find
+            返回值      游标对象
+        * 所有的操作符加上引号,作为字符串形式
+        * true/false/null 改成 True/False/None
+
+            cursor = myset.find({"name":{"$exists":True}},{"_id":0})
+
+            for i in cursor:
+                # print(i)
+                print(i["name"],"--",i["King"])
+
+        cursor 对象属性函数
+            next()      获取下一个文档
+            limit()     获取前几条文档
+            skip()      跳过几条
+            count()     计数
+            sort()      排序
+            * sort 的参数发生了变化 sort([(域名,1/-1),(),()...])
+            * limit,sort,skip 使用时, 必须保证游标在最开始的位置
+
+
+        # for i in cursor.limit(3):
+        # for i in cursor.skip(3):
+        # for i in cursor.sort([("name",1),("age",-1)]):
+        for i in cursor.sort([("name",1)]):
+            print(i)
+
+        find_one(query,field)
+            功能:  查找首个符合条件的文档
+            参数:  同find
+            返回值:  返回字典
+            # dic = {"$or":[{"King":"乾隆"},{"name":"陈道明"}]}
+            # d = myset.find_one(dic,{"_id":0})
+            # print(d)
+
+
+    修改操作
+        update_one      修改一个
+        update_many     修改多个
+        update          修改一个或多个
+
+            # myset.update_many({"King":"康熙"},{"$set":{"king_name":"玄烨"}})
+            # myset.update_one({"King":"雍正"},{"$set":{"king_name":"忘了名字"}})
+            # myset.update_one({"name":"郑少秋"},{"$set":{"King":"乾隆"}},upsert=True)
+            # myset.update({"King":"乾隆"},{"$set":{"king_name":"弘历"}})
+            # myset.update({"King":"乾隆"},{"$set":{"king_name":"弘历"}},multi=True)
+
+    删除操作
+        delete_one      删除一个
+        delete_many     删除多个
+        remove          删除一个或多个
+
+        # myset.delete_one({"King":"康熙"})
+        # myset.delete_many({"King":"雍正"})
+        # myset.remove({"king_name":{"$exists":False}})
+        # myset.remove({"king_name":None},multi=True)
+
+    复合操作
+        find_one_and_update
+        find_one_and_delete
+
+        # data = myset.find_one_and_delete({"name":"张铁林"})
+        # print(data)
+
+
+    索引聚合操作
+        create_index    创建索引
+            参数: 二元元组构成列表
+                create_index([("age",1)])
+                create_index([("age",1),("name":-1)])
+                也可以直接写 域名 ("age") 表示对该域创建正向索引
+            返回值: 索引名称
+
+        list_indexes    查看索引
+        drop_index      删除索引
+        drop_indexes    删除所有索引
+
+    聚合操作
+        aggregate()
+        功能: 完成聚合操作
+        参数: 聚合管道, 同mongoshell 中的聚合
+        返回值: 数据操作结果游标对象
+
+        lis = [
+            {"$group": {"_id": "$sex", "num": {"$sum": 1}}},
+        ]
+        cursor = myset.aggregate(lis)
+
+    文件存储
+        步骤:
+        1. 导入bson 二进制模块,连接数据库
+            import bson.binary
+        2. 选择要存储的文件, 使用 rb 方式读取内容
+        3. 将读取的内容转换为 bson 格式
+            content = bson.binary.Binary(data)
+            功能: 将 bytes 字串 转换为 bson 格式
+            参数: bytes 字串
+            返回值: 转换后的数据
+        4. 将内容插入到数据库
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

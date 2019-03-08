@@ -1,0 +1,20 @@
+mongo shell 对 JavaScript 的支持
+    * 界面支持 基本的 JS 程序
+    * 通过 JS 也可以处理一些简单的逻辑问题
+    > var cursor = db.class.find()
+    > cursor.next()
+    {
+        "_id" : ObjectId("5c775857c69c81d07212f58a"),
+        "name" : "yang",
+        "age" : 6,
+        "score" : [
+            98,
+            56,
+            32
+        ]
+    }
+    >
+
+    > cursor.hasNext()
+    true
+    >

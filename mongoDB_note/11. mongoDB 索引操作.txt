@@ -1,0 +1,113 @@
+索引操作
+    什么是索引
+        建立文档所在位置的查找清单, 使用索引可以快速查找, 减少遍历次数, 提高查找效率
+
+    索引约束
+        即: 什么情况下不适合建立索引?
+            索引本身也占据空间, 数据量很小的时候就没必要用索引
+            索引表会根据数据的修改及时变更, 过于频繁的变更也会对数据增删改的效率造成较低
+                因此大量增删改的时候 查询需求量不大 ,不需要创建索引
+
+    创建索引
+        db.collection.createIndex()
+        db.collection.ensureIndex()
+        db.collection.createIndexes()
+        功能: 创建索引
+        参数:
+            索引域 选取要被创建所用的域, 字典形式
+                取值 {域名:1/-1}
+                    1 正向
+                    -1 逆向
+            索引选项
+                通常来加名字, 虽然不设置默认也会自动添加名字 以 域名_1/-1 的形式自动创建
+                也可以指定 索引类型 默认是普通索引
+                其他类型往下看其他索引部分
+        ps:
+            ensureIndex 和 createIndex 没啥差别,只是名字不一样而已.
+            ensureIndex 目前也不被官网更新注明, 后期可能会被抹除
+            更推荐 createIndex, 更亲和也更被认可
+
+            createIndexes([{},{}])  创建多个索引, 没必要, 索引一般都是创建很少就够了
+            但是
+        实例:
+
+            > db.class.createIndex({name:1})
+            {
+                "createdCollectionAutomatically" : false,
+                "numIndexesBefore" : 1,
+                "numIndexesAfter" : 2,
+                "ok" : 1
+            }
+
+            通过第二个参数定义索引名称 为 Age
+            > db.class.createIndex({age:1},{name:"Age"})
+            {
+            	"createdCollectionAutomatically" : false,
+            	"numIndexesBefore" : 2,
+            	"numIndexesAfter" : 3,
+            	"ok" : 1
+            }
+            >
+
+    查看索引
+        db.class.getIndexes()
+        查看索引详细, 无参数
+        默认 _id 域是由系统自动创建的, 且该索引不能被删除
+        1 表示正向索引
+        -1 表示逆向索引
+        > db.class.getIndexes()
+        [
+            {
+                "v" : 2,
+                "key" : {
+                    "_id" : 1
+                },
+                "name" : "_id_",
+                "ns" : "grade.class"
+            },
+            {
+                "v" : 2,
+                "key" : {
+                    "name" : 1
+                },
+                "name" : "name_1",
+                "ns" : "grade.class"
+            }
+        ]
+        >
+
+    删除索引
+        db.collection.dropIndex()
+        功能: 删除一个除了 _id 以外的索引
+        参数:
+            索引名称 / 键值对
+        实例:
+            > db.class.dropIndex("Age")
+            { "nIndexesWas" : 3, "ok" : 1 }
+
+            > db.class.dropIndex({"name":1})
+            { "nIndexesWas" : 2, "ok" : 1 }
+            >
+
+        db.collection.dropIndexes()
+        功能: 删除所有除了 _id 以外的索引
+
+其他类型索引
+    复合索引
+        根据多个域创建一个索引
+        db.class.createIndex({name:1,age:-1},{name:"name_age"})
+
+    子文档 / 数组索引
+        如果某个域创建索引, 该域的值是子文档 / 数组 ,则对子文档或者数组的某项查询也是索引查询
+        ps:
+            此索引并不需要你专门做什么操作, 只是一种行为定义
+            当你给 book :{xx:"xx"} , book 域创建索引
+            则 进行 "book.xx" 的查找的时候则为 子文档索引查找
+
+    唯一索引
+        要求创建索引的域不能有重复值
+        db.class.createIndex({name:1},{unique:true})
+
+    稀疏索引
+        如果创建索引时,某些文档不存在指定索引域,则忽略这些文档
+        db.class.createIndex({age:1},{sparse:true})

@@ -1,0 +1,345 @@
+修改文档
+    格式对比:
+        mysql :
+            update table set .... where ....
+        mongo :
+            db.collection.updateOne(query,update,upsert)
+
+修改函数
+    updateOne   修改首个
+        db.collection.updateOne(query,update,upsert)
+        功能: 修改第一个复合条件的文档
+        参数:
+            query   筛选条件,用法同 find
+            update  要修改的数据项, 配合修改操作符
+            upsert  bool类型
+                        设置为 true    未查到则插入新文档
+                        设置为 false   默认是 false, 未查到则不修改
+        简单实例:
+            将 aa 的年龄修改为 19 岁
+                > db.class.updateOne({name:"aa"},{$set:{age:19}})
+                { "acknowledged" : true, "matchedCount" : 1, "modifiedCount" : 1 }
+
+            未添加 upsert 为 true 时, 无匹配, 因此没变化
+                > db.class.updateOne({name:"ww"},{$set:{age:19}})
+                { "acknowledged" : true, "matchedCount" : 0, "modifiedCount" : 0 }
+
+            设置 upsert 为 true 时, 无匹配则会插入新文档
+                > db.class.updateOne({name:"ww"},{$set:{age:19}},{upsert:true})
+                {
+                    "acknowledged" : true,
+                    "matchedCount" : 0,
+                    "modifiedCount" : 0,
+                    "upsertedId" : ObjectId("5c779dbbe0253ec903878cd0")
+                }
+
+    updateMany   修改所有
+        db.collection.updateMany(query,update,upsert)
+        功能: 修改所有符合条件的文档
+        参数:  同 updateOne
+
+        简单实例:
+            将所有年龄 小于18 的修改为 21
+                > db.class.updateMany({age:{$lt:18}},{$set:{age:21}})
+                { "acknowledged" : true, "matchedCount" : 6, "modifiedCount" : 6 }
+                >
+
+    update      修改所有
+        db.collection.update(query,update,upsert,multi)
+        功能: 修改文档
+        参数:
+            query update 用法同 updateOne/updateMany
+            upsert 功能同  updateOne/updateMany
+                写法上不在写在 {} 中, 直接  upsert=true/false 即可
+            multi  bool 值
+                multi=false 同 updateOne 只修改首条 默认为 false
+                multi=true 同 updateMany 修改全部
+        ps:
+            mongoDB 全部的参数都位置传参,如果想传第四个,就必须传入第三个参数
+
+        简单实例:
+            > db.class.update({age:21},{$set:{age:88}})
+            WriteResult({ "nMatched" : 1, "nUpserted" : 0, "nModified" : 1 })
+            >
+
+            upsert 使用的时候,直接写 bool 即可
+                > db.class.update({name:"yy"},{$set:{age:88}},true)
+                WriteResult({
+                    "nMatched" : 0,
+                    "nUpserted" : 1,
+                    "nModified" : 0,
+                    "_id" : ObjectId("5c77a57ee0253ec903878d10")
+                })
+                >
+
+            multi 使用同 upsert, 直接写 bool 即可
+                > db.class.update({age:21},{$set:{age:88}},true,true)
+                WriteResult({ "nMatched" : 5, "nUpserted" : 0, "nModified" : 5 })
+                >
+
+    findOneAndUpdate
+        db.collection.findOneAndUpdate(query,update)
+        功能: 查找第一个复合条件文档, 然后修改
+        参数: query update 用法同 updateOne/updateMany
+        返回: 修改前的文档
+
+        > db.class.findOneAndUpdate({name:"cc"},{$set:{age:26}})
+        {
+            "_id" : ObjectId("5c77910c4b2b9d43636830ca"),
+            "name" : "cc",
+            "age" : 88,
+            "sex" : "b",
+            "hobby" : [
+                "python",
+                "football",
+                "computer"
+            ]
+        }
+
+    findOneAndReplace
+        db.collection.findOneAndReplace(query,doc)
+        功能: 查找第一个复合条件文档, 然后替换
+        参数:
+            query 用法同 updateOne/updateMany
+            doc   要替换的文档
+        返回: 修改前的文档
+
+        实例:
+            > db.class.findOneAndReplace({name:"cc"},{name:"zz",age:16})
+            {
+                "_id" : ObjectId("5c77910c4b2b9d43636830ca"),
+                "name" : "cc",
+                "age" : 26,
+                "sex" : "b",
+                "hobby" : [
+                    "python",
+                    "football",
+                    "computer"
+                ]
+            }
+
+            如果 query 设置为空,则可以对第一条内容进行替换
+                > db.class.findOneAndReplace({},{name:"kk",age:16})
+                {
+                    "_id" : ObjectId("5c7790c94b2b9d43636830c8"),
+                    "name" : "aa",
+                    "age" : 19,
+                    "sex" : "b",
+                    "hobby" : [
+                        "draw",
+                        "dance",
+                        "running"
+                    ]
+                }
+
+mongoDB 修改操作符(修改器)
+    修改的时候必须要使用修改器
+    如果用较老的 update 方法 确实可以不使用修改器, 但是实现效果是替换很不理想
+
+    > db.class.update({name:"yy"},{age:99})
+    WriteResult({ "nMatched" : 1, "nUpserted" : 0, "nModified" : 1 })
+
+    修改前: { "name" : "yy", "age" : 88 }
+    修改后: { "age" : 99 }
+
+$set
+    修改一个域, 或者增加一个域
+    > db.class.update({age:99},{$set:{name:"yy"}})
+    WriteResult({ "nMatched" : 1, "nUpserted" : 0, "nModified" : 1 })
+
+    修改前:{ "age" : 99}
+    修改后:{ "age" : 99, "name" : "yy" }
+
+
+$unset
+    删除一个域
+    官方推荐 选定被删除域的时候值用 "" 空即可,当前其实随便字符都行,重点是匹配域, 而不是值
+    > db.class.update({age:99},{$unset:{age:""}})
+    WriteResult({ "nMatched" : 1, "nUpserted" : 0, "nModified" : 1 })
+
+    修改前: { "age" : 99, "name" : "yy" }
+    修改后: { "age" : 99}
+
+$rename
+    重命名一个域
+    将存在 sex 的文档的 sex 字段改成 gender
+        > db.class.updateMany({sex:{$exists:true}},{$rename:{sex:"gender"}})
+        { "acknowledged" : true, "matchedCount" : 6, "modifiedCount" : 6 }
+
+    其实不需要前面自己筛选，系统也会自动判断对有这个字段的才会操作
+        > db.class.updateMany({},{$rename:{gender:"sex"}})
+        { "acknowledged" : true, "matchedCount" : 10, "modifiedCount" : 6 }
+
+$inc
+    加法修改器
+    让所有人年龄加1
+    > db.class.updateMany({},{$inc:{age:1}})
+    { "acknowledged" : true, "matchedCount" : 10, "modifiedCount" : 10 }
+
+    修改前:  { "name" : "yy" }
+    修改后:  { "name" : "yy", "age" : 1 }
+
+    ps:
+        值可以是正数,负数或者小数
+        么有年龄字段的会产生 age:1 字段
+
+$mul
+    乘法修改器
+    用法,参数同加法,只是运算由加法换成乘法
+    ps: 怎么除法? *0.5 = /2
+
+$setOnInsert
+    当使用update*插入文档时,作为补充内容
+    update* 在筛选无法命中存在文档时可以添加新内容,但是插入内容是全面 query 和 update 部分
+    当需要加入额外字段的时候,使用此修改器
+
+    > db.class.updateOne({name:"77",age:15},{$set:{eat:"many"},$setOnInsert:{run:"fast"}},{upsert:true})
+    {
+        "acknowledged" : true,
+        "matchedCount" : 0,
+        "modifiedCount" : 0,
+        "upsertedId" : ObjectId("5c788dbce0253ec903878dba")
+    }
+    >
+
+    ps:
+        由此可见其实 update 的第二个参数 update 是可以多个修改器同时使用的
+        > db.class.update({name:"77"},{$set:{age:22},$unset:{eat:""}})
+        WriteResult({ "nMatched" : 1, "nUpserted" : 0, "nModified" : 1 })
+
+        修改前:  { "age" : 15, "name" : "77", "eat" : "many", "run" : "fast" }
+        修改后:  { "age" : 22, "name" : "77", "run" : "fast" }
+
+$max
+    指定值不低于下限
+    指定某个域的值如果小于该值则修改为该值, 大于则不变
+
+    > db.class.update({name:"77"},{$max:{age:20}})
+    WriteResult({ "nMatched" : 1, "nUpserted" : 0, "nModified" : 0 })
+
+    修改前: { "age" : 22, "name" : "77", "run" : "fast" }
+    修改后: { "age" : 22, "name" : "77", "run" : "fast" }
+
+
+    > db.class.update({name:"77"},{$max:{age:30}})
+    WriteResult({ "nMatched" : 1, "nUpserted" : 0, "nModified" : 1 })
+
+    修改前: { "age" : 22, "name" : "77", "run" : "fast" }
+    修改后: { "age" : 30, "name" : "77", "run" : "fast" }
+
+$min
+    指定值不低于上限
+    用法同 $max 控制最大值不超过设定值,大于了就改成设定值
+
+
+数组修改器
+
+$push
+    向数组中添加一项
+    > db.class.update({name:"dd"},{$push:{hobby:"sing"}})
+    WriteResult({ "nMatched" : 1, "nUpserted" : 0, "nModified" : 1 })
+
+    修改前:  { "name" : "dd", "age" : 88, "hobby" : [ "football", "computer" ], "sex" : "b" }
+    修改后:  { "name" : "dd", "age" : 88, "hobby" : [ "football", "computer", "sing" ], "sex" : "b" }
+
+$pushAll
+    向数组中添加多项
+    > db.class.update({name:"dd"},{$pushAll:{hobby:["eat","run","cry"]}})
+    WriteResult({ "nMatched" : 1, "nUpserted" : 0, "nModified" : 1 })
+
+    修改前:  { "name" : "dd", "age" : 88, "hobby" : [ "football" ], "sex" : "b" }
+    修改后:  { "name" : "dd", "age" : 88, "hobby" : [ "football", "eat", "run", "cry" ], "sex" : "b" }
+
+$pull
+    从数组中删除一个值
+
+    > db.class.update({name:"dd"},{$pull:{hobby:"eat"}})
+    WriteResult({ "nMatched" : 1, "nUpserted" : 0, "nModified" : 1 })
+
+    修改前:  { "name" : "dd", "age" : 88, "hobby" : [ "football", "eat", "run", "cry" ], "sex" : "b" }
+    修改后:  { "name" : "dd", "age" : 88, "hobby" : [ "football", "run", "cry" ], "sex" : "b" }
+
+    ps:
+        如果有重复的值, 会全部删除
+
+$pullAll
+    从数组中删除多个值
+
+    > db.class.update({name:"dd"},{$pullAll:{hobby:["eat","run"]}})
+    WriteResult({ "nMatched" : 1, "nUpserted" : 0, "nModified" : 1 })
+
+    修改前:  { "name" : "dd", "age" : 88, "hobby" : [ "football", "eat", "run", "cry" ], "sex" : "b" }
+    修改后:  { "name" : "dd", "age" : 88, "hobby" : [ "football", "cry" ], "sex" : "b" }
+
+    ps:
+        如果有重复的值, 会全部删除
+
+    ps:
+        删除的时候也可以按照条件删除
+
+$pop
+    弹出数组中一项
+    只能弹出两头的第一个内容
+    取值 为 1 弹出最后一项
+    取值 为 -1 弹出第一项
+
+    > db.class.update({name:"dd"},{$pop:{hobby:1}})
+    WriteResult({ "nMatched" : 1, "nUpserted" : 0, "nModified" : 1 })
+
+    修改前:  { "name" : "dd", "hobby" : [ "football", "eat", "run", "cry" ] }
+    修改后:  { "name" : "dd", "hobby" : [ "football", "eat", "run" ] }
+
+    > db.class.update({name:"dd"},{$pop:{hobby:-1}})
+    WriteResult({ "nMatched" : 1, "nUpserted" : 0, "nModified" : 1 })
+
+    修改前:  { "name" : "dd", "hobby" : [ "football", "eat", "run", "cry" ] }
+    修改后:  { "name" : "dd", "hobby" : [ "eat", "run", "cry" ] }
+
+$addToSet
+    向数组中添加一项
+    不能和已有值重复
+    如果是重复值则不做任何操作
+
+    > db.class.updateOne({name:"mm"},{$addToSet:{score:18}})
+    { "acknowledged" : true, "matchedCount" : 1, "modifiedCount" : 1 }
+
+    修改前: { "name" : "mm", "age" : 12, "score" : [ 12, 16, 17 ] }
+    修改后: { "name" : "mm", "age" : 12, "score" : [ 12, 16, 17, 18 ] }
+
+    > db.class.updateOne({name:"mm"},{$addToSet:{score:18}})
+    { "acknowledged" : true, "matchedCount" : 1, "modifiedCount" : 1 }
+
+    修改前: { "name" : "mm", "age" : 12, "score" : [ 12, 16, 17, 18 ] }
+    修改后: { "name" : "mm", "age" : 12, "score" : [ 12, 16, 17, 18 ] }
+
+$each
+    对多个值逐一操作
+
+    > db.class.updateOne({name:"mm"},{$push:{score:{$each:[89,26]}}})
+    { "acknowledged" : true, "matchedCount" : 1, "modifiedCount" : 1 }
+
+    修改前: { "name" : "mm", "age" : 12, "score" : [ 12, 16, 17, 18 ] }
+    修改后: { "name" : "mm", "age" : 12, "score" : [ 12, 16, 17, 18, 89, 26 ] }
+
+$position
+    指定位置插入
+    需要配合 $each 使用, $each 提供值
+    $position 指定索引位置
+
+    > db.class.updateOne({name:"mm"},{$push:{score:{$each:[90],$position:0}}})
+    { "acknowledged" : true, "matchedCount" : 1, "modifiedCount" : 1 }
+
+    修改前: { "name" : "mm", "age" : 12, "score" : [ 12, 16, 17, 18 ] }
+    修改后: { "name" : "mm", "age" : 12, "score" : [ 90, 12, 16, 17, 18 ] }
+
+
+$sort
+    对数组排序
+    搭配 $each 使用
+    取值 1 为升序, -1 为降序
+
+    > db.class.updateOne({name:"mm"},{$push:{score:{$each:[],$sort:1}}})
+    { "acknowledged" : true, "matchedCount" : 1, "modifiedCount" : 1 }
+
+    修改前: { "name" : "mm", "age" : 12, "score" : [ 90, 12, 19, 17, 18 ] }
+    修改后: { "name" : "mm", "age" : 12, "score" : [ 12, 17, 18, 19, 90] }

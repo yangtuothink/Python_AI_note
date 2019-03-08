@@ -1,0 +1,44 @@
+删除文档
+    mysql   delete from table where ...
+    mongo   db.collection.deleteOne(query)
+
+deleteOne
+    功能:删除第一个符合条件的文档
+    参数: query 筛选条件, 用法同其他的 find 中的 query
+
+    > db.class.deleteOne({name:"kk"})
+    { "acknowledged" : true, "deletedCount" : 1 }
+
+deleteMany
+    deleteMany(query)
+    功能:删除第一个符合条件的文档
+    参数: query 筛选条件, 用法同其他的 find 中的 query
+    无参数表示全部删除
+
+    > db.class.deleteMany({name:{$in:["bb","dd","ff"]}})
+    { "acknowledged" : true, "deletedCount" : 2 }
+
+    > db.class.deleteMany({gender:{$exists:false}})
+    { "acknowledged" : true, "deletedCount" : 3 }
+
+    > db.class.deleteMany({})
+    { "acknowledged" : true, "deletedCount" : 10 }
+
+remove
+    remove(query,justOne)
+    功能: 删除文档
+    参数:
+        query 筛选条件, 用法同其他的 find 中的 query
+        justOne
+            = true  同 deleteMany
+            = false 同 deleteOne
+    官方文档不记录了, 后期可能会被删除
+
+findOneDelete
+    findOneDelete(query)
+    功能:  查找第一个文档然后删除这个文档
+    参数:  query 筛选条件, 用法同其他的 find 中的 query
+
+    > db.class.findOneDelete({age:19})
+    { "acknowledged" : true, "deletedCount" : 1 }
+

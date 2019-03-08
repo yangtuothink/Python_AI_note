@@ -1,0 +1,105 @@
+
+1 创建数据库名为 grade
+        > use grade
+        switched to db grade
+
+2 创建集合 class
+
+3 插入若干数据 格式如下
+{name:xxx,age:xxx,sex:xx,hobby:[xx,xx,xx]}
+age : 7~14
+hobby: draw, dance , running , sing, football , basketball, computer, python
+        > db.class.find()
+
+
+4 查找
+    1.查看所有人信息
+        db.class.find()
+
+    2.查看年龄为 8 岁信息
+        db.class.find({age:8})
+
+    3.查看年龄大于 10 岁信息
+        db.class.find({age:{$gt:10}})
+
+    4.查看年龄 8-12 岁信息
+        db.class.find({age:{$in:[8,9,10,11,12]}})
+
+    5.查看年龄 7岁 且 喜欢画画的 男生信息
+        db.class.find({age:7,hobby:"draw",sex:"b"})
+
+    6.查看年龄 小于8岁 或者 大于12岁的学生
+        db.class.find({$or:[{age:{$lt:8}},{age:{$gt:12}}]})
+
+    7.查看年龄 9岁 或者 11岁的学生
+        db.class.find({$or:[{age:12},{age:9}]})
+
+    8.查找有两个兴趣的学生
+        db.class.find({hobby:{$size:2}})
+
+    9.查找喜欢计算机的同学
+        db.class.find({hobby:"computer"})
+
+    10.查找既喜欢画画又喜欢跳舞的
+        db.class.find({hobby:{$all:["draw","dance"]}})
+        db.class.find({hobby:"dance",hobby:"draw"})
+
+    11.统计兴趣爱好有三项的人数
+        db.class.find({hobby:{$size:3}})
+
+    12.找出班级中年龄第二大的同学
+        db.class.find().sort({"age":-1})[1]
+
+    13.查看本班兴趣爱好行涵盖范围
+        db.class.distinct("hobby")
+
+    14.找到班级中年龄最小的三位同学
+        db.class.find().sort({age:1}).limit(3)
+
+
+练习第二阶段
+    使用之前的数据库
+    1. 将小红年龄改成8岁,兴趣爱好改成 跳舞画画
+        db.class.updateOne({name:"小红"},{$set:{age:8, hobby:["draw","dance"]}})
+
+    2. 追加小明的兴趣爱好唱歌
+        db.class.updateOne({name:"小明"},{$push:{hobby:"sing"}})
+
+    3.小王多了兴趣爱好吹牛,打篮球
+        db.class.updateOne({name:"小明"},{$pushAll:{hobby:["fox","basketball"]}})
+
+    4.小李兴趣要增加跑步唱歌,但是不能是和已有的一样
+        db.class.updateOne({name:"小明"},{$addToSet:{hobby:{$each:["run","sing"]}}})
+
+    5.班级所有年龄加一
+        db.class.updateMany({},{$inc:{age:1}})
+
+    6.删除小明的sex属性
+         db.class.updateOne({},{$unset:{sex:""}})
+
+    7.小李第一个兴趣爱好不要了
+        db.class.updateOne({name:"小李",{$pop:{hobby:-1}}})
+
+    8.删除小红兴趣中的画画唱歌
+        db.class.updateOne({name:"小红",{$pullAll:{hobby:["draw","sing"]}}})
+
+三阶段练习
+    使用 grade 数据库完成
+    1.删除所有年龄 小于8岁,或者 大于12岁 的学生
+        db.class.deleteMany({$or:[{age:{$lt:8}},{age:{$gt:12}}]})
+    2.给小红第二项爱好变为 跳舞
+        db.class.updateOne({name:"小红"},{$set:{"hobby.1":"dance"}})
+    3.删除兴趣爱好中没有 画画 的学生
+        db.class.deleteMany({},{hobby:{$nin:["draw"]}})
+    4.给小王增加一个域: 备注:{民族:"回族", 习俗:"不吃猪肉"}
+        db.class.updateOne({name:"小王"},{$set:{备注:{民族:"回族", 习俗:"不吃猪肉"}}})
+    5.修改小王的备注域, 增加项: 宗教:"伊斯兰教"
+        db.class.updateOne({name:"小王"},{$set:{"备注.宗教":"伊斯兰教"}})
+
+
+四阶段练习
+    使用 grade 数据库完成
+    1. 将所有男生按照年龄升序排序结果不显示 _id
+        db.class.aggergate([{$match:{sex:"b"}},{$sort:{age:1}},{$project:{_id:0}}])
+    2. 统计班级是否有重名同学
+        db.class.aggergate({[$group:{_id:"$name",num:{$sum:1}}},{$match:{num:{$gt:1}}}])

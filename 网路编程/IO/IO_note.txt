@@ -1,0 +1,60 @@
+IO
+
+定义
+    在内存中存在数据交换的操作认为是IO操作
+    e.g.
+        和终端交互： input   print
+        和磁盘交互： read  write
+        和网络互： recv  send
+
+基于 IO 的程序分类
+    IO密集型程序：在程序执行中有大量IO操作，而cpu运算较少。消耗cpu较少，耗时长。
+    计算密集型程序：程序运行中计算较多，IO操作相对较少。cpu消耗多，执行速度快，几乎没有阻塞。
+
+IO分类
+    阻塞IO ，非阻塞IO，IO多路复用
+
+阻塞IO
+    1.定义：在执行IO操作时如果执行条件不满足则阻塞。阻塞IO是IO的默认形态。
+    2.效率：阻塞IO是效率很低的一种IO。但是由于逻辑简单所以是默认IO行为。
+    3.阻塞情况：
+        * 因为某种执行条件没有满足造成的函数阻塞
+            e.g.  accept   input   recv
+        * 处理IO的时间较长产生的阻塞状态
+            e.g. 网络传输，大文件读写
+
+非阻塞IO
+    1. 定义 ：通过修改IO属性行为，使原本阻塞的IO变为非阻塞的状态。
+    2. 设置非阻塞IO
+        sk.setblocking(bool)
+            功能：设置套接字为非阻塞IO
+            参数：默认为True，表示套接字IO阻塞；设置为False则套接字IO变为非阻塞
+    3. 超时检测 ：设置一个最长阻塞时间，超过该时间后则不再阻塞等待。
+        sk.settimeout(sec)
+            功能：设置套接字的超时时间
+            参数：设置的时间
+
+IO多路复用
+    1. 定义
+        同时监控多个IO事件，当哪个IO事件准备就绪就执行哪个IO事件。以此形成可以同时处理多个IO的行为
+        避免一个IO阻塞造成其他IO均无法执行，提高了IO执行效率。
+    2. 具体方案
+        select方法 ： windows  linux  unix
+        poll方法： linux  unix
+        epoll方法： linux
+
+        epoll  效率 比 select 和 poll 要高
+        epoll 监控数量比 select 要高
+        epoll 触发方式比 poll 要多
+    3. python 实现IO多路复用
+	    import select
+
+
+
+
+
+
+
+
+
+

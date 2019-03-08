@@ -1,0 +1,76 @@
+库操作
+    创建数据库:  use [database]
+    查看数据库:  show dbs
+    删除:  db.dropDatabase()
+    备份:  mongodump -h[host] ip -d[databasename] name -o[path] /usr/abc
+    恢复:  mongorestore -h[host:port] -d[database] [file]
+    状态查看:  mongostat     mongotop
+
+
+集合操作
+    创建集合
+        db.createCollection(collectionName)
+        db.collectionName.insert(doc)
+    查看集合
+        show collections
+        show tables
+    删除数组
+        db.collection.drop()
+    集合重命名
+        db.collection.renameCollection(newName)
+
+文档操作
+
+    增:
+        插入
+            插入单个 :  db.collection.insertOne(doc)
+            插入多个 :  db.collection.insertMany([doc,doc...])
+            综合插入函数 :  db.collection.insert()
+        保存
+            db.collection.save()
+        查找
+            db.collection.find(query,field)
+            db.collection.findOne(query,field)
+
+    查:
+        查找操作符
+            比较 :  $eq   $lt  $gt   $lte  $gte  $ne  $in  $nin
+            逻辑 :  $and  $or  $not  $nor
+            数组 $all  $size  $slice
+            其他 $exists  $mod  $type
+        函数
+            db.collection.distinct(field)
+            db.class.find().pretty()
+            db.class.find({},{_id:0}).limit(3)
+            db.class.find({},{_id:0})
+            db.class.find({},{_id:0}).count()
+            db.class.find({},{_id:0}).sort({age:1})
+
+            db.class.find({},{_id:0}).limit(5).skip(3).sort({age:1}).pretty()
+            db.class.find({},{_id:0}).limit(5).skip(3).sort({age:1}).pretty()[1]
+    改:
+        保存
+            db.collection.updateOne(query,update,upsert)
+            db.collection.updateMany(query,update,upsert)
+            db.collection.update(query,update,upsert,multi)
+            db.collection.findOneAndUpdate(query,update)
+            db.collection.findOneAndReplace(query,doc)
+
+        修改操作符
+            $set   $unset   $rename    $inc   $mul   $setOnInsert   $max   $mix
+            数组操作符: $push    $pushAll    $pull   $pullAll    $pop    $addToSet   $each   $position   $sort
+
+    删:
+        db.class.deleteOne({name:"kk"})
+        db.class.deleteMany({name:{$in:["bb","dd","ff"]}})
+        db.class.remove({name:"kk"},{justOne:false})
+
+
+其他类型操作
+    时间
+        获取当前时间
+            new Date()
+            Date()
+
+
+

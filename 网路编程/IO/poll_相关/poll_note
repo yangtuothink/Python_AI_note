@@ -1,0 +1,44 @@
+基于poll方法的IO多路复用
+
+  1.  p = select.poll()
+	    功能 ： 创建poll对象
+        返回值： poll对象
+
+  2.  p.register(fd,event)
+        功能: 注册关注的IO事件
+        参数：
+            fd  要关注的IO
+            event  要关注的IO事件类型
+            * 常用类型：
+                POLLIN  读IO事件（rlist） 无法预估的 IO
+                POLLOUT 写IO事件 (wlist)  可以预估的 IO
+                POLLERR 异常IO  （xlist）
+                POLLHUP 断开连接
+
+            * 可以关注多个
+            * e.g. p.register(sockfd, POLLIN|POLLERR)
+
+			p.unregister(fd)
+			功能：取消对IO的关注
+			参数：IO对象或者IO对象的fileno
+
+  3.  events = p.poll()
+        功能： 阻塞等待监控的IO事件发生, 一旦发生就返回
+        返回值： 返回发生的IO
+            events格式  [(fileno,event),()....]
+            每个元组为一个就绪IO
+                元组第一项是该IO的 fileno
+                元组第二项 event 为该IO就绪的事件类型
+
+            * 很麻烦的事情来了, 他没有返回具体的对象, 因此需要我们基于 fileno 来找对象
+            * 即自己创建一个关系了只能, 因为 fileno 是所有的 IO 唯一的标识, 这样我们自己维护一个关系表, 以字典的格式
+            * 建立对应字典确保字典中的IO和关注的IO时刻保持一致
+            字典格式： {fileno：io_obj}
+
+  4. poll_server 步骤
+		 【1】 创建套接字
+		 【2】 将套接字register
+		 【3】 创建查找字典，并维护
+		 【4】 循环监控IO发生
+		 【5】 处理发生的IO
+

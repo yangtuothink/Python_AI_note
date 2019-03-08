@@ -1,0 +1,27 @@
+python实现IO多路复用
+    1. select 方法
+        rs, ws, xs=select.select(rlist, wlist, xlist[, timeout])
+        功能: 监控IO事件，阻塞等待IO发生
+        参数：
+		    rlist  列表  存放关注的等待发生的IO事件
+		        对于无法预知的 IO 事件的发生处理 比如 accept input
+            wlist  列表  存放关注的要主动处理的IO事件
+                对于可以决定的 IO 事件的发生处理 比如 send
+            xlist  列表  存放关注的出现异常要处理的IO事件
+            timeout  超时时间, 可选参数, 如果不写则表示会阻塞
+                如果设置后, 在超时时间结束后, 不报错, 继续向下执行代码
+        返回值：
+            rs 列表  rlist中准备就绪的IO
+            ws 列表  wlist中准备就绪的IO
+            xs 列表  xlist中准备就绪的IO
+
+  2. select 实现tcp服务
+	    1. 将关注的IO放入对应的监控类别列表
+        2. 通过select函数进行监控
+        3. 遍历select返回值列表，确定就绪IO事件
+        4. 处理发生的IO事件
+
+		注意 ：
+		    1. wlist中如果存在IO事件，则select立即返回给ws
+            2. 处理IO过程中不要出现死循环占有服务端的情况
+            3. IO多路复用消耗资源较少，效率较高

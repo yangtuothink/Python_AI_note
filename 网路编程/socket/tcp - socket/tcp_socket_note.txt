@@ -1,0 +1,90 @@
+tcp套接字编程
+    服务端流程
+        1. 创建套接字
+		    sk = socket.socket(socket_family=AF_INET,socket_type=SOCK_STREAM,proto=0)
+			功能： 创建套接字
+			参数：
+			    socket_family       网络地址类型 AF_INET-->ipv4
+                socket_type         选择类型,与 TCP/UDP 中选择, 默认就是 TCP 模式
+                    套接字类型 SOCK_STREAM 流式(TCP)
+                    SOCK_DGRAM 数据报(UDP)
+                proto  通常为0,可以忽略       选择子协议
+			返回值： 套接字对象
+		2. 绑定地址
+            sk.bind(addr)
+			功能： 绑定本机网络地址
+			参数： 二元元组 (ip,port)  例如:('0.0.0.0',8888)
+        3. 设置监听
+			sk.listen(n)
+            功能 ： 将套接字设置为监听套接字，确定监听队列大小
+			参数 ： 监听队列大小
+        4. 等待处理客户端连接请求
+			conn,addr = sk.accept()
+			功能： 阻塞等待处理客户端请求
+			返回值： conn  客户端连接套接字
+			         addr  连接的客户端地址
+			* 阻塞函数 ： 程序运行过程中遇到阻塞函数则暂停执行，直到达成某种条件后继续运行。
+        5. 消息收发
+			data = conn.recv(buffersize)
+                功能 : 接受客户端消息
+                参数 ：每次最多接收消息的大小
+                返回值： 接收到的内容
+
+            n = conn.send(data)
+                功能 : 发送消息
+                参数 ：要发送的内容  bytes格式
+                返回值： 发送的字节数
+
+			*  str --> bytes   string.encode()
+			   bytes --> str   bytes.decode()
+        6. 关闭套接字
+			sk.close()
+			功能：关闭套接字
+    """
+    import socket
+    sk = socket.socket()
+    sk.bind(("127.0.0.1", 8008))
+    sk.listen()
+    conn, addr = sk.accept()
+    conn.send(b"hello")
+    conn.close()
+    sk.close()
+    """
+
+    客户端流程
+        1. 创建套接字
+            sk = socket.socket()
+           * 只有相同类型的套接字才能进行通信
+        2. 请求连接
+            sk.connect(server_addr)
+                功能：连接服务器
+                参数：元组  服务器地址
+        3. 收发消息
+            print(sk.recv(1024))
+           * 防止两端都阻塞，recv send要配合
+        4. 关闭套接字
+    """
+    import socket
+    sk = socket.socket()
+    sk.connect(("127.0.0.1", 8008))
+    print(sk.recv(1024))
+    sk.close()
+    """
+
+    代码流程总结
+        服务端：socket() --> bind() --> listen() --> accept() --> recv(),send() --> close()
+        客户端：socket() --> connect() --> send(),recv() --> close()
+
+    整体过程总结
+        * tcp连接中当一端退出，另一端如果阻塞在recv，此时recv会立即返回一个空字串。
+        * tcp连接中如果一端已经不存在，让然试图通过send发送则会产生BrokenPipeError
+        * 一个监听套接字可以同时连接多个客户端，也能够重复被连接
+        * 网络收发缓冲区
+            【1】网络缓冲区有效的协调了消息的收发速度
+            【2】send和recv实际是向缓冲区发送接收消息，当缓冲区不为空recv就不会阻塞。
+        * tcp粘包
+            【1】 原因：tcp以字节流方式传输，没有消息边界。多次发送的消息被一次接收，此时就会形成粘包。
+            【2】 影响：如果每次发送内容是一个独立的含义，需要接收端独立解析此时粘包会有影响。
+            【3】 处理：
+                1. 人为的添加消息边界
+                2. 控制发送速度

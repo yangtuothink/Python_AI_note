@@ -1,0 +1,54 @@
+一. socket概念
+    套接字：实现网络编程进行数据传输的一种技术手段
+    相关模块: import  socket
+	分类
+		 流式套接字(SOCK_STREAM): 以字节流方式传输数据，实现tcp网络传输方案。
+		 数据报套接字(SOCK_DGRAM):以数据报形式传输数据，实现udp网络传输方案。
+
+		 面向连接--tcp协议--可靠的--流式套接字
+		 无连接--udp协议--不可靠--数据报套接字
+
+二. tcp套接字和udp套接字编程区别
+    1. 流式套接字是以字节流方式传输数据，数据报套接字以数据报形式传输
+	2. tcp套接字会有粘包，udp套接字有消息边界不会粘包
+	3. tcp套接字保证消息的完整性，udp套接字则不能
+	4. tcp套接字依赖listen accept建立连接才能收发消息，udp套接字则不需要
+	5. tcp套接字使用send，recv收发消息，udp套接字使用sendto，recvfrom
+
+
+三. socket模块方法和socket套接字属性
+    1. 部分socket模块方法
+		【1】 gethostname()  获取计算机名
+		【2】 gethostbyname('www.baidu.com')  获取主机ip地址
+		【3】 getservbyname('mysql') 获取服务端口号
+		【4】 getservbyport(3306)  获取端口对应服务
+		【5】 inet_aton('192.168.1.2') 将IP转换为bytes子串
+		【6】 inet_ntoa(b'\xc0\xa8\x01\x02') 将bytes子串转换为IP地址
+
+    2. 套接字属性
+	    【1】 sk.type  套接字类型
+		【2】 sk.family 套接字地址类型
+		【3】 sk.getsockname() 获取套接字绑定地址
+		【4】 sk.fileno() 获取套接字的文件描述符
+				文件描述符：系统中每一个IO操作都会分配一个整数作为编号，该整数即这个IO操作的文件描述符。
+				特点： 文件描述符是系统用来区分处理IO的标志，不会重复。
+        【5】 sk.getpeername() 获取连接套接字客户端地址
+        【6】 sk.setsockopt(level,option,value)
+		      功能：设置套接字选项
+			  参数：
+			        level  选项类别   SOL_SOCKET
+				    option 具体选项内容
+				    value  选项值
+		【7】 sk.getsockopt(level,option)
+		      功能 ：获取套接字选项值
+
+四. UDP套接字广播
+    广播定义 ： 一端发送多点接收
+    广播地址 ： 每个网络的最大地址为发送广播的地址，向该地址发送，则网段内所有主机都能接收。
+
+
+
+
+
+
+

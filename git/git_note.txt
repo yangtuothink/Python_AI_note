@@ -1,0 +1,315 @@
+什么是git
+    开源的分布式版本控制系统, 用于高效的管理大小项目和文件
+
+代码管理工具
+    防止代码丢失, 做备份
+    代码版本管控, 设置节点, 多版本切换
+    建立分支各自开发, 互不影响, 方便合并
+    多人协调, 方便代码共享传输
+
+
+git 特点
+    开源, 多在 *nix 下使用
+    分布式管理工具 (svn 集中式)
+        分布式:
+            由中间服务器来集中管理
+            权限也由中央控制
+            数据保密性更好, 因为只通过中央处理
+            但是中央服务器如果炸了就gg
+            而且全部依靠中央, 对网络之类的环境要求较高
+        集中式:
+            无中央服务器, 每个主机都是均等的
+            每个主机都可以保存代码以及推送给其他主机
+            不论只要不是所有主机都炸了, 都可以从其他的主机获取到
+            以及主机拉取的时候不依赖 中央服务器的环境, 更加安全快速
+    每台主机都有完整代码, 代码的交互是增量更新
+    拥有更好的分支支持, 方便多人协调工作
+
+git 实际工作模式
+    虽然 分布式的git 不需要依靠中央节点
+    但是 实际工作还是会定义中央主机, 工作模式模拟的是 集中式管理
+
+git 安装
+    sudo  apt-get install git
+
+git 空间
+    本地计算机                                           他人计算器
+    |------------------------------------------|        |------------|
+    | 工作区          暂存区            仓库     |        |  远程仓库   |
+    |#######--------#######----------#######---|--------|--########  |
+    |------------------------------------------|        |------------|
+
+
+    |          --①->           ---②-->         |
+    |        -----------③------------>         |
+    |
+    --------------------------------------------        --------------
+
+    工作区    项目所在操作目录, 项目操作区域
+    暂存区    用于记录工作区的工作(修改)内容
+    仓库      将记录内容备份
+    远程仓库   远程主机上的 git 仓库
+
+git 初始化配置
+
+    命令 git config
+        配置系统所有用户
+            git config --system [选项]
+            配置文件位置: /etc/gitconfig
+        配置当前用户
+            git config --global [选项]
+            配置文件: ~/.gitconfig
+        配置当前项目
+            git config [选项]
+            配置文件: 项目目录/.git/config
+            * 要求必须在项目下执行
+        * 顺序 项目>当前用户>所有用户
+    配置用户名(必须要配置)
+        sudo git config --system user.name yangtuo
+        执行位置    任何位置
+        实例
+            tarena@tedu:~$ sudo git config --system user.name yangtuo
+            [sudo] tarena 的密码：
+            tarena@tedu:~$
+            tarena@tedu:~$ cat /etc/gitconfig
+            [user]
+                name = yangtuo
+            tarena@tedu:~$
+    配置用户邮箱(必须要配置)
+        sudo git config --global user.email 745206110@qq.com
+        实例
+            tarena@tedu:~$ sudo git config --global user.email 745206110@qq.com
+            tarena@tedu:~$ cat ~/.gitconfig
+            [user]
+                email = 745206110@qq.com
+            tarena@tedu:~$
+
+    查看当前项目 配置信息
+        git config --list
+        实例
+            tarena@tedu:~/git$ git config --list
+            user.name=yangtuo
+            user.email=745206110@qq.com
+            core.repositoryformatversion=0
+            core.filemode=true
+            core.bare=false
+            core.logallrefupdates=true
+            core.editor=vscode
+            tarena@tedu:~/git$
+
+git 操作
+
+初始化仓库
+    初始化命令   git init
+    实例
+        tarena@tedu:~/git$ git init
+        初始化空的 Git 仓库于 /home/tarena/git/.git/
+        tarena@tedu:~/git$
+    意义:
+        将某个项目目录, 变为 git 操作目录, 生成 git 本地仓库
+        该目录即可使用 git 进行管理
+
+查看分支状态
+    git status
+    说明
+      git              本地计算机                           他人计算器
+    |------------------------------------------|        |------------|
+    | 工作区          暂存区            仓库     |        |  远程仓库   |
+    |#######        #######          #######   |        |  ########  |
+    |------------------------------------------|        |------------|
+
+
+    |----------------------------------------------------------------|
+    |   -----add----->   ----commit---->                             |
+    |   <-----------checkout------------                             |
+    |                                    --------push--------->      |
+    |   <------------------------pull--------------------------      |
+    |                                    <----fetch/clone------      |
+    -----------------------------------------------------------------|
+        初始默认分支为 master
+        当工作区和仓库 不一致的时候, 会有所提示
+
+将工作区内容记录到暂存区
+    git add files
+    git add file1, file2
+    git add *
+
+将暂存区的内容返
+    git rm --cached file
+
+    将暂存区内容同步到仓库
+        git commit -m 'add some files'
+        说明
+            每次同步都需要添加同步信息
+            commit 操作只能同步暂存区已经记录的内容
+
+查看历史版本
+    详细查看
+        tarena@tedu:~/git$ git log
+        commit 3f8c95ebeb0998f9f4de793ceb856827a5da27fc
+        Author: yangtuo <745206110@qq.com>
+        Date:   Thu Mar 7 16:17:36 2019 +0800
+
+        新添加了一个电子词典项目
+
+    简单查看
+        tarena@tedu:~/git$ git log --pretty=oneline
+        3f8c95ebeb0998f9f4de793ceb856827a5da27fc 新添加了一个电子词典项目
+        5f8a36d92345fc685381418125a69e63d9163df3 全部删掉
+        9bcdb97cae7082b59b532c817b1e08e8cde3ec9a add some files
+        tarena@tedu:~/git$
+
+文件比较
+    git diff [file]
+
+丢弃工作区的修改
+    git checkout -- file
+
+从仓库恢复文件
+    git checkout file
+
+移动 / 删除 文件并提交缓存
+    git mv [file] [path]
+    git rm [file]
+
+版本控制
+    退回到上一个的 commit 节点
+    git reset --hard HEAD^
+    说明
+        HEAD 是 commit 指针
+        一个 ^ 代表后退一个
+        通常不会写太多, 最多两个三个而已
+
+    去往指定的 commit 操作节点
+    git reset --hard [commit_id]
+    说明
+        commit_id 不需要全写, 前7位就够了
+        去往指定的节点后, 在此节点后的所有版本会无法查看
+        可以通过 git reflog 来全部查看
+
+    查看所有的日志
+    git reflog
+    说明
+        利用该操作,可以去往任意的历史位置
+
+    标签
+        标签创建
+        git tag[名称] -m [message]
+        说明
+            标签  在工作的重要位置添加的快照, 保存当时的工作状态
+                    一般用于版本迭代等
+            注意  message 可以不写, 但是最好添加
+
+        查看所有标签
+        git tag
+
+        将标签 给指定的 commit_id 添加
+        git tag [tag_name] [commit_id] -m [message]
+
+        查看标签详细信息
+        git show [tag]
+
+        删除标签
+        git tag -d [tag_name]
+
+        去往某个标签节点
+        git reset --hard[tag]
+
+临时工作区
+    创建临时保存工作区
+    git stash
+        说明
+            让工作区回到修改前状态
+            并且修改保存在一个临时工作区
+
+    查看临时工作区列表
+    git stash list
+        说明
+            最新的工作区记录为 stash{0} 依次排列
+
+    将临时应用到工作区
+    git stash apply stash@{2}
+
+    将临时工作区删除
+    git stash drop [stash]  删除一个
+    git stash clear     删除所有
+
+分支管理
+    分支即每个人在原有代码基础上建立自己的工作环境, 独立开发, 不回干扰其他分支操作 完成后合并到主线
+    多人开发建立分支优点: 安全, 不影响其他分支, 独立控制进度
+
+分支操作命令
+    查看分支情况
+        git branch
+        说明  前面 * 的表示当前工作分支
+    创建新的分支
+        git branch [branch]
+    切换分支
+        git checkout [branch]
+    合并分支
+        git merge [branch]
+        说明
+            合并时会产生冲突 需要手动修改
+            在合并操作中尽量添加新的模块 不要手动修改原有代码内容
+            在
+    删除分支
+        git branch -d [branch]
+        说明
+            未合并的分支是无法用 -d 删除的( 防手滑,防恶意手滑 )
+            必须使用 -D 才可以删除未合并的分支
+
+远程仓库管理
+    远程仓库
+        远程主机上的 git 仓库
+        git 作为分布式结构 每台主机的 git 仓库结构相似 只是把其他主机上的 git 仓库作为远程仓库
+    共享仓库
+        git 分布式结构衍生了很多工作模式 共享仓库是常用的模式之一
+        普通隐藏的 .git 仓库不能被其他主机获取代码 共享仓库即可以将 git 项目共享的仓库
+创建远程仓库
+    创建
+        mkdir yangtuo_git
+        chown tarena:tarena yangtuo_git
+    初始化该目录为 git 仓库, 设置 bare 属性
+        cd gitrepo/
+        git init --bare yangtuo.git
+        说明
+            yangtuo  项目名称    .git 习惯后缀
+    将配置 git 目录设置为 和共享仓库目录相同的属主
+        chown -R tarena:tarena yangtuo.git
+    添加远程仓库
+        git remote add origin tarena@127.0.0.1:/home/tarena/yangtuo_git/yangtuo.git
+        说明
+            该操作要在本地的一个 git 项目中执行
+            与远程连接默认使用 SSH 方法
+            origin 是给远程主机起的名字
+    删除远程主机
+        git remote rm [origin]
+        注意
+            连接多个远程主机的时候 远程名字不能重复
+    将本地分支推送到远程共享仓库
+        git push -u [origin] [branch]
+        注意
+            -u 表示建立对应分支自动关联 一般首次向远程推送某个分支时使用
+            git branch -a 查看链接的远程分支
+
+    获取远程仓库项目
+        git clone tarena@172.40.91.185:/home/tarena/gitrepe/tedu.git
+    从远程获取最新代码
+        git pull
+        注意
+            clone 已经自动建立了关联, pull 可以直接拉取代码到对应分支
+    从远程获取最新内容到本地
+        git fetch
+        注意
+            制霸远程分支拿来 并不在合并
+            若想合并 则在需要 git merge [branch]
+        git fetch origin master:tmp
+            可以改拉取过来之后的分支名字
+
+推送其他内容
+    推送标签
+        git push [origin] [tag]
+    推送落后版本
+        git push --force origin
+        当当前版本落后于远程版本 无法更新时使用
+

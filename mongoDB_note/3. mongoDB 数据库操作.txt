@@ -1,0 +1,101 @@
+mongoDB 数据库操作
+
+    数据库命名规则
+        1. 使用 utf8 字符，默认所有字符为 utf8
+        2. 不能含有空格 . / \ "\0" 字符 （c++ 中会将 "\0" 作为结束标志，且mongoDB是用 c++ 写的）
+        3. 不能超过 64 字节
+        4. 不要和吸引数据库重名
+
+    重点的变量
+        所有的变量的命名都是基于 小驼峰式（首字符小写，后面单词首字母大写）
+        全局变量 db 代表当前正在使用的数据库
+            未选择数据库的时候默认为 db 为 test 数据库
+                mysql 中不选择数据库无法操作数据，
+                mongoDB 则可以使用默认的 test 数据库进行数据操作
+
+    创建数据库
+        use [database]
+        1. 选择数据库，不存在的时候就自动创建
+        2. 使用此命令创建数据库不会立即创建，当被插入数据时才会真正创建
+            输入： use stu
+            输出： switched to db stu
+
+    查看数据库
+        show dbs
+        使用此命令查看刚刚创建的数据库是无法查看的，被插入数据后才可以看到
+            使用
+                行为：查看当前的数据库
+                命令：> show dbs
+                输出：
+                    admin  0.000GB
+                    local  0.000GB
+
+    删除数据库
+        删除当前所用的数据库
+        输入: > db.dropDatabase()
+        输出： { "dropped" : "test", "ok" : 1 }
+
+    备份数据库
+        mongodump -h[host] ip -d[databasename] name -o[path] /usr/abc
+        1. 路径选择不存在的会自动创建文件夹
+        2. mongo命令，在终端执行，不是在mongo shell 里面执行
+        输入： tarena@tedu:~$ mongodump -h 127.0.0.1 -d stu -o dir
+        输出：
+            2019-02-27T14:26:10.240+0800	writing stu.class to
+            2019-02-27T14:26:10.256+0800	done dumping stu.class (1 document)
+    备份文件查看
+        输入： tarena@tedu:~$ ls dir/stu
+        输出： class.bson  class.metadata.json
+
+
+    恢复数据库
+        1. mongorestore -h[host:port] -d[database] [file]
+        2. mongo命令，在终端执行，不是在mongo shell 里面执行
+        选择的 -d 如果本地不存在也会自动创建
+        输入： tarena@tedu:~$ mongorestore -h 127.0.0.1:27017 -d student dir/stu
+        输出：
+            2019-02-27T14:33:39.201+0800	the --db and --collection args should only be used when restoring from a BSON file. Other uses are deprecated and will not exist in the future; use --nsInclude instead
+            2019-02-27T14:33:39.201+0800	building a list of collections to restore from dir/stu dir
+            2019-02-27T14:33:39.202+0800	reading metadata for student.class from dir/stu/class.metadata.json
+            2019-02-27T14:33:39.213+0800	restoring student.class from dir/stu/class.bson
+            2019-02-27T14:33:39.220+0800	no indexes to restore
+            2019-02-27T14:33:39.220+0800	finished restoring student.class (1 document)
+            2019-02-27T14:33:39.220+0800	done
+
+    查看数据库运行状态
+        mongostat
+        1. mongo命令，在终端执行，不是在mongo shell 里面执行
+        2. 输出参数：
+            insert query update delete： 增查改删每秒次数
+            command： momgo命令每秒次数
+            flushes： 与磁盘交互频率
+            vsize res:  虚拟内存和物理内存情况
+            time：  运行时间
+        输入：  tarena@tedu:~$ mongostat
+        输出： 每秒刷新循环打印一次
+            insert query update delete getmore command dirty used flushes vsize   res qrw arw net_in net_out conn                time
+            *0    *0     *0     *0       0     2|0  0.0% 0.0%       0  933M 72.0M 0|0 1|0   159b   46.8k    1 Feb 27 14:41:31.482
+            *0    *0     *0     *0       0     2|0  0.0% 0.0%       0  933M 72.0M 0|0 1|0   159b   46.8k    1 Feb 27 14:41:32.471
+            *0    *0     *0     *0       0     2|0  0.0% 0.0%       0  933M 72.0M 0|0 1|0   158b   46.5k    1 Feb 27 14:41:33.467
+            *0    *0     *0     *0       0     1|0  0.0% 0.0%       0  933M 72.0M 0|0 1|0   157b   46.1k    1 Feb 27 14:41:34.472
+            *0    *0     *0     *0       0     2|0  0.0% 0.0%       0  933M 72.0M 0|0 1|0   158b   46.5k    1 Feb 27 14:41:35.468
+            *0    *0     *0     *0       0     2|0  0.0% 0.0%       0  933M 72.0M 0|0 1|0   158b   46.4k    1 Feb 27 14:41:36.466
+
+    监控数据库中数据表读写情况
+        mongotop
+        1. mongo命令，在终端执行，不是在mongo shell 里面执行
+        2. 参数说明:
+            ns:  数据集合
+            total： 每秒读写总时长
+            read：  每秒读时长
+            write：   每秒写时长
+        输入： tarena@tedu:~$ mongotop
+        输出： 每秒刷新循环打印一次
+                          ns    total    read    write    2019-02-27T14:49:32+08:00
+          admin.system.roles      0ms     0ms      0ms
+        admin.system.version      0ms     0ms      0ms
+           local.startup_log      0ms     0ms      0ms
+        local.system.replset      0ms     0ms      0ms
+                   stu.class      0ms     0ms      0ms
+               student.class      0ms     0ms      0ms
+                  test.class      0ms     0ms      0ms

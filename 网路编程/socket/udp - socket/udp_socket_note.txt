@@ -1,0 +1,47 @@
+UDP套接字编程
+    服务端流程
+		1. 创建数据报套接字
+            sk = socket(AF_INET,SOCK_DGRAM)
+        2. 绑定地址
+            sk.bind(addr)
+        3. 消息收发
+            data,addr = sockfd.recvfrom(buffersize)
+				功能： 接收UDP消息
+				参数： 每次最多接收多少字节
+				返回值： data  接收到的内容
+				        addr  消息发送方地址
+            n = sockfd.sendto(data,addr)
+				功能： 发送UDP消息
+				参数： data  发送的内容 bytes格式
+				       addr  目标地址
+				返回值：发送的字节数
+        4. 关闭套接字
+		    sockfd.close()
+    """
+    import socket
+
+    udp_sk = socket.socket(type=socket.SOCK_DGRAM)
+    udp_sk.bind(('127.0.0.1', 9000))
+    msg, addr = udp_sk.recvfrom(1024)
+    print(msg)
+    udp_sk.sendto(b'hi', addr)
+    udp_sk.close()
+    """
+
+    客户端流程
+        1. 创建套接字
+            sk=socket.socket(type=socket.SOCK_DGRAM)
+        2. 收发消息
+            sk.sendto(data,("127.0.0.1",8000))
+            sk.recvfrom(1024)
+        3. 关闭套接字
+            sk.close()
+    """
+    import socket
+
+    sk = socket.socket(type=socket.SOCK_DGRAM)
+    addr = ("127.0.0.1", 9000)
+    sk.sendto(b"hello", addr)
+    data, addr = sk.recvfrom(1024)
+    print(data)
+    sk.close()

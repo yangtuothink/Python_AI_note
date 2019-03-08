@@ -1,0 +1,21 @@
+
+固定集合
+    定义: 指在mongoDB 中创建大小固定的集合, 称为固定集合
+    特点:
+        能够淘汰早期数据
+        可以控制集合大小
+        数据插入, 差最后啊数操作速度快
+    使用:
+        日志处理
+        临时缓存
+    创建:
+        db.createCollection(collection, {capped:true, size:100000, max:20})
+        参数:
+            capped  表示固定集合
+            size    表示大小, 字节
+            max     表示存储数量上限
+    实例:
+        > db.createCollection("log",{capped:true,size:1000,max:3})
+        { "ok" : 1 }
+
+

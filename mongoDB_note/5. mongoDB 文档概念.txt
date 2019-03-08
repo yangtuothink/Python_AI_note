@@ -1,0 +1,93 @@
+什么是文档
+    文档是 mongodb 基本的数据组织单元，类似于mysql 中的记录
+    文档由多个键值对组成，没个键值对表达一个数据项
+    属于 bson 数据
+        ps： json 手下的败犬 bson.... 了解就好
+
+文档中的键值对
+
+    特点：
+        无序
+        通过键取其中的值
+        键不能重复
+
+    键：即文档的域名（相当于mysql 中的字段名），表达数据的基本信息
+        规定：
+            使用 utf8
+            不能含有 "\0"
+
+         思考：
+            null？Null？
+        ps:
+            键可以不加引号，值必须加引号,默认就是 utf8类型
+
+    值：存储的值
+        数据类型：
+        Type	    Number	      Alias	        Notes
+        Double	        1	    “double”
+        String	        2	    “string”
+        Object	        3	    “object”
+        Array	        4	    “array”
+        Binary data	    5	    “binData”
+        Undefined	    6	    “undefined”	    Deprecated.
+        ObjectId	    7	    “objectId”
+        Boolean	        8	    “bool”
+        Date	        9	    “date”
+        Null	        10	    “null”
+        Regular     	11	    “regex”
+        DBPointer	    12	    “dbPointer”	    Deprecated.
+        JavaScript	    13	    “javascript”
+        Symbol	        14	    “symbol”	    Deprecated.
+        JavaScript  	15	    “javascriptWithScope”
+        32-bit integer	16	    “int”
+        Timestamp	    17	    “timestamp”
+        64-bit integer	18	    “long”
+        Decimal128	    19	    “decimal”	    New in version 3.4.
+        Min key	        -1	    “minKey”
+        Max key	        127	    “maxKey”
+
+        常用的：
+            整形（int）         整数
+            浮点型（double）    小数
+            布尔（bool）        true/false
+            字符串（string）    "abcdsd" utf-8 格式
+            数组（array）       [1,2,3,40] 列表
+            时间（date）        日期/时间
+            binary Data        二进制格式类型
+            空值（Null）        null 空（关键字）
+            对象（object）      内部文档
+            ObjecId            ID 对象
+
+    ps：
+        关于 ObjecId 表示每个集合自己的一个不会重复的标识 ID
+        输入：> db.羊驼.find()
+        输出： { "_id" : ObjectId("5c76361ab9330b7c152100ff"), "name" : "yangtuo", "age" : 17 }
+        分析：
+            "_id"： 表示自动生成的域名，表示主键域
+            ObjectId： 由24为 16位进制码通过一定算法得到
+        关于自己自定义：
+            必须要在键值中 用"_id" 然后手动制定
+            且，哪怕是自己自定义也不能重复，重复会报错
+
+文档结构设计
+    1. 一个集合中的文档尽量表达相同的数据内容
+    2. 文档层次不宜嵌套过多
+    3. 在集合中文档使用比较自由，原则上结构可以各不相同
+
+    ps：
+        场景设计：
+            用户注册填写 qq,微信,微博,ins 要求至少写一个
+            mysql 的话就要4个字段，然后必然产生大量的空数据
+            mongoDB 的话就可以写那个就存那个
+
+
+            整形（int）         整数
+            浮点型（double）    小数
+            布尔（bool）        true/false
+            字符串（string）    "abcdsd" utf-8 格式
+            数组（array）       [1,2,3,40] 列表
+            时间（date）        日期/时间
+            binary Data        二进制格式类型
+            空值（Null）        null 空（关键字）
+            对象（object）      内部文档
+            ObjecId            ID 对象

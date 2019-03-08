@@ -1,0 +1,47 @@
+文件存储
+    方式:
+        传统方式:
+            存储路径    仅存储文件路径, 本质为 字符串
+                优点: 节省空间
+                缺点: 不真实存储在数据库, 文件或者数据库发送变动需要修改数据库
+            存储文件本身  将文件转换成 二进制 存储在数据库
+                优点: 文件在数据库中, 不容易丢失
+                缺点: 占用数据库空间较多, 文件存取效率不高
+    GridFS 文件存储方案
+        目的: 更好的存取 MongoDB 中的大文件 ( 超过 16 m 就被认为大文件 )
+        说明:
+            1. 在 MongoDB 中创建两个集合, 共同存储文件
+            2. fs.files 集合用于存储文件信息, 为每个文件建立一个信息文档
+            3. fs.chunks 集合中建立与 fs.files 集合对应文件文档的关联, 将文件分块, 以 2 进制格式存储
+
+
+    存取方法
+        存储
+            命令: mongofiles -d dbname put file
+            dbname 不存在的时候回自动创建
+
+            mongofiles -d dbname put dict_demo/e_dict.txt
+            > db.fs.files.find()
+            { "chunkSize" : 261120,
+                "uploadDate" : ISODate("2019-03-04T03:23:28.375Z"),
+                "length" : 16640891,
+                "md5" : "01b9e949829b44970d527425e8e93b12",
+                "filename" : "dict_demo/e_dict.txt" }
+
+            > db.fs.chunks.find()
+            {"_id": ...,
+            "files_id":.....,       关联 files 表的ID
+            "n":38,
+            "data":BinDate(0,"ZlcmlvciB0byB0aGUgb.....HVzdSBpbmZ0aW1l") }
+            Type "it" for more
+
+        提取
+            命令:  mongofiles -d dbname get file
+
+            tarena@tedu:~$ mongofiles -d grid get dict_demo/e_dict.txt
+            2019-03-04T11:41:43.911+0800	connected to: localhost
+            finished writing to dict_demo/e_dict.txt
+            tarena@tedu:~$
+
+        优点: 存储方便, 提供了较好的存储命令
+        缺点: 读写效率较低, 不建议存储小文件

@@ -1,0 +1,36 @@
+mongoDB 集合（表）操作
+
+    集合命名规则：
+        使用 utf8 字符（通常不会起中文名字）
+        不能含有 "\0" 字符
+        不要以 system. 开头（否咋会覆盖系统集合开头）
+        不要和关键字重名
+
+    创建集合
+        1. db.createCollection(collectionName)
+            输入：> db.createCollection("class1")
+            输出： { "ok" : 1 }
+
+        2. 当插入数据时候，如果指定集合不存在也会自动创建集合
+            输入： > db.class789.insert({"name":"羊驼","age":17})
+            输出： WriteResult({ "nInserted" : 1 })
+
+    查看集合
+        show collections
+        show tables 暂时这个命令也可以，哪天不行了也没准
+
+            输入： > show collections
+            输出:
+                class
+                class1
+                class789
+
+    删除集合
+        db.collection.drop()
+            输入： > db.class.drop()
+            输出： true
+
+    集合重命名
+        db.collection.renameCollection(newName)
+            输入： > db.class789.renameCollection("羊驼")
+            输出：  { "ok" : 1 }

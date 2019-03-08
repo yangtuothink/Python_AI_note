@@ -1,0 +1,50 @@
+插入单个文档
+    db.collection.insertOne(doc)
+    向被 use 的数据库中插入数据
+    命令：db.class.insertOne({"name":"yangtuo","age":17})
+    输出：
+        {
+            "acknowledged" : true,
+            "insertedId" : ObjectId("5c765408b9330b7c15210100")
+        }
+
+    ps：插入的时候的注意点
+        1. 键可以不加引号，默认utf8，但是值如果是字符串就必须加引号
+        2. 文档插入集合是有序行为，默认按照时间就近排序
+        3. 可以自己设定 "_id" ，仍旧不能重复
+
+插入多个文档
+    db.collection.insertMany([doc,doc...])
+    向被 use 的数据库中插入多条数据
+    输入：> db.class0.insertMany([{_id:3,name:"4tuo","age":418,"sex":"man"},{_id:4,name:"hjsdj",age:18}])
+    输出: { "acknowledged" : true, "insertedIds" : [ 3, 4 ] }
+
+综合插入函数（过时函数）
+    db.collection.insert()
+    1. insertOne + insertMany
+    2. 目前官方文档已经不推荐（推荐插入一条用 One，多条用 Many）
+    3. 不知道哪天就不能用了，但是比较舒服啊
+    示例
+        > db.class0.insert([{name:"4tuo","age":418,"sex":"man"},{name:"hjsdj",age:18}])
+        BulkWriteResult({
+            "writeErrors" : [ ],
+            "writeConcernErrors" : [ ],
+            "nInserted" : 2,
+            "nUpserted" : 0,
+            "nMatched" : 0,
+            "nModified" : 0,
+            "nRemoved" : 0,
+            "upserted" : [ ]
+        })
+
+        > db.class0.insert({name:"jj",age:18})
+        WriteResult({ "nInserted" : 1 })
+        >
+
+保存文档
+    db.collection.save()
+    1. 此命令可以实现添加文档，用法同 insert
+    2. 如果插入 "_id" 存在重复的数据，会进行相应的覆盖
+    3. 当然如果不写 "_id" 则必然不重复，因此就插入文档
+    输入： > db.class0.save({name:"ub",age:88,sex:"man"})
+    输出： WriteResult({ "nInserted" : 1 })

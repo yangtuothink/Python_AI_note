@@ -1,0 +1,77 @@
+其他数据类型
+
+时间类型
+    获取当前时间
+        new Date()  自动生成当前时间（国际标准时间）
+            db.class.insertOne({book:"数学",date:new Date()})
+        Date()      获取当前操作系统的时间（当地时间）
+    时间函数
+        ISODate(date)
+            功能：将指定时间转换为mongoDB 存储时间
+            参数： 默认当前的 ISO 时间
+            通过字符串指定时间
+                "2019-1-1 11:11:11"
+                "20190101 11:11:11"
+                "20190101"
+    获取时间戳
+        valueOf()
+            功能: 根据标准时间生成时间戳
+        > db.class.insert({book:"yes",date:ISODate("20190101 11:11:11").valueOf()})
+        WriteResult({ "nInserted" : 1 })
+
+        添加数据： { "book" : "yes", "date" : 1546341071000 }
+Null 类型
+    表示空值
+    值： null
+    含义：
+        表示某个域的值为空
+        在表达式语句中表示不存在
+    实例:
+        > db.class.insert({book:"yes",price:null})
+        WriteResult({ "nInserted" : 1 })
+        添加数据{ "book" : "yes", "price" : null }
+
+        > db.class.find({price:null}) 把所有不存在 price 的以及存在 price:null 的查询出来了
+        输出:
+        { "_id" : ObjectId("5c78d0ac24dd494da47a3276"), "book" : "yes", "date" : 1546341071000 }
+        { "_id" : ObjectId("5c78d1f924dd494da47a3277"), "book" : "yes", "price" : null }
+
+        ps:
+            对比一下 $exists
+                $exists 只会查出不存在的
+                field:null 还会把 存在field的值为空的也查询出来
+
+Object 对象
+    定义: 文档中每个域的值为文档, 该文档称为 object 数据, 即对象类型
+
+    创建
+        > db.class.insertOne({author:"yt",book:{title:"羊驼日记",publish:"羊驼出版社",price:999}})
+        {
+            "acknowledged" : true,
+            "insertedId" : ObjectId("5c78d4d824dd494da47a3278")
+        }
+    查询
+        用 "外部域.内部域" 的格式, 而且必须加 引号 标记为字符串, 否则无法识别
+
+        > db.class.find({"book.title":"羊驼之歌"},{_id:0})
+        { "author" : "yang", "book" : { "title" : "羊驼之歌", "publish" : "羊驼出版社", "price" : 998 } }
+        >
+
+    修改
+        就没啥大区别了同其他.无非就是 字段的部分变一下罢了
+        > db.class.updateOne({"book.title":"羊驼之歌"},{$set:{price:555}})
+        { "acknowledged" : true, "matchedCount" : 1, "modifiedCount" : 1 }
+
+        修改前: { "author" : "yang", "book" : { "title" : "羊驼之歌", "publish" : "羊驼出版社", "price" : 998 } }
+        修改后: { "author" : "yang", "book" : { "title" : "羊驼之歌", "publish" : "羊驼出版社", "price" : 555 } }
+
+    ps:
+        由此延伸到数组, 数组下标也可以直接引用方法
+
+        "数组域.下标" 可以获取某一项值, 筛选还是修改或者删除都可以依旧就是更换域名而已
+        > db.class.find({"score.0":{$gt:10}})
+        { "_id" : ObjectId("5c78974324dd494da47a3275"), "name" : "mm", "age" : 12, "score" : [ 12, 16, 17, 18, 26, 89, 90 ] }
+
+        > db.class.updateOne({name:"mm"},{$set:{"score.0":88}})
+        { "_id" : ObjectId("5c78974324dd494da47a3275"), "name" : "mm", "age" : 12, "score" : [ 88, 16, 17, 18, 26, 89, 90 ] }
+
