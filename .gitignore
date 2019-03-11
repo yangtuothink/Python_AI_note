@@ -1,3 +1,4 @@
 public/
+__pycache__/
 static/upload/
 .idea/
