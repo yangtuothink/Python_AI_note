@@ -117,14 +117,3 @@ cookie ： linux下文件类型
 
 
 
-href 属性指定目标网页地址。该地址可以有几种类型：
-　　绝对URL - 指向另一个站点(比如 href="http://www.jd.com)
-　　相对URL - 指当前站点中确切的路径(href="index.htm")
-　　锚URL - 指向当前页面中的锚(href="#top")
-target：
-　　_blank表示在新标签页中打开目标网页
-　　_self表示在当前标签页中打开目标网页(默认为此方式)
-
-
-
-
