@@ -1,0 +1,20 @@
+
+接口使用
+st = struct(fmt)
+功能  生成结构化对象
+参数  fmt 定制的数据结构
+
+st.pack (v1,v2,v3)
+功能  将一组数据按照指定格式打包转换成 bytes
+参数  要打包的字符串
+返回值 bytes 字节串
+
+st.unpack(bytes_data)
+功能  将bytes 字节串按照指定格式解析
+参数  要解析的字符串
+返回值 解析后的内容
+
+也可以使用 struct 直接调用 pack / unpack 方法
+但是第一个参数要传入 fmt
+即 st. pack / unpack( fmt, ......)
+

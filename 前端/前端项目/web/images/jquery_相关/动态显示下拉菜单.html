@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        ul, ol {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+
+        ul {
+            width: 150px;
+            background-color: #80A24A;
+            text-align: center;
+            cursor: default;
+        }
+
+        ol {
+            display: none;
+        }
+
+        .address:hover ol {
+            display: block;
+        }
+
+        ol li:hover {
+            background-color: salmon;
+        }
+    </style>
+    <script>
+        // window.onload = function () {
+        //     // 获取内层列表
+        //     var ol = document.getElementsByTagName("ol")[0];
+        //     var lis = ol.children; // 数组
+        //     // 获取地址标签
+        //     var span = document.getElementsByTagName("span")[0];
+        //     // 添加点击事件
+        //     for (var i = 0; i < lis.length; i++) {
+        //         // console.log(i); // 最后 i 为 lis.length 越界
+        //         lis[i].onclick = function () {
+        //             // 取值, this 指代当前被点击元素
+        //             span.innerHTML = this.innerHTML;
+        //         };
+        //     }
+        //
+        // }
+
+
+        $(function () {
+            $("ol li").
+        })
+
+    </script>
+</head>
+<body>
+<ul>
+    <li class="address">
+        <span>北京</span>
+        <ol>
+            <li>北京</li>
+            <li>上海</li>
+            <li>广州</li>
+            <li>深圳</li>
+        </ol>
+    </li>
+</ul>
+</body>
+</html>

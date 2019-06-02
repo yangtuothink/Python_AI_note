@@ -1,0 +1,88 @@
+安装
+    C:\Users\Python>pip install virtualenv
+    Requirement already satisfied: virtualenv in c:\python36\lib\site-packages (16.4.1)
+
+    C:\Users\Python>
+
+
+创建
+    C:\Users\Python>virtualenv testvir
+    Using base prefix 'c:\\python36'
+    New python executable in C:\Users\Python\testvir\Scripts\python.exe
+    Installing setuptools, pip, wheel...
+    done.
+
+    C:\Users\Python>
+
+
+打开进入
+    C:\Users\Python>cd testvir
+    C:\Users\Python\testvir>cd Scripts
+    C:\Users\Python\testvir\Scripts>activate.bat
+
+    (testvir) C:\Users\Python\testvir\Scripts>pip list
+    Package    Version
+    ---------- -------
+    pip        19.0.3
+    setuptools 40.8.0
+    wheel      0.33.1
+    (testvir) C:\Users\Python\testvir\Scripts>
+
+
+"""
+virtualenv 创建好了的 Scripts 此文件以后作为
+
+mkvirtualenv
+workon
+deactivate
+
+命令的存放地点
+如果未添加 环境变量 以后需要切换到此目录才可以执行相关的虚拟环境的创建
+
+
+
+"""
+
+
+
+
+安装
+    (testvir) C:\Users\Python\testvir\Scripts>pip install virtualenvwrapper-win
+    ...
+
+
+创建进入
+    (testvir) C:\Users\Python\testvir\Scripts>mkvirtualenv testvir2
+     C:\Users\Python\Envs is not a directory, creating
+    Using base prefix 'c:\\python36'
+    New python executable in C:\Users\Python\Envs\testvir2\Scripts\python.exe
+    Installing setuptools, pip, wheel...
+    done.
+
+    (testvir2) C:\Users\Python\testvir\Scripts>
+
+
+退出虚拟环境
+    (testvir2) C:\Users\Python\testvir\Scripts>deactivate.bat
+
+
+查看当前虚拟环境
+    C:\Users\Python\testvir\Scripts>workon
+
+    Pass a name to activate one of the following virtualenvs:
+    ==============================================================================
+    testvir2
+
+    C:\Users\Python\testvir\Scripts>
+
+
+进入虚拟环境
+    C:\Users\Python\testvir\Scripts>workon testvir2
+    (testvir2) C:\Users\Python\testvir\Scripts>
+
+
+
+问题处理
+1. 缺少 django 连接 mysql 的驱动
+django.core.exceptions.ImproperlyConfigured: Error loading MySQLdb module: No module named 'MySQLdb'
+解决方式: (testvir2) C:\Users\Python\PycharmProjects\djangostart>pip install mysql-python

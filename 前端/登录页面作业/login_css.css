@@ -1,0 +1,112 @@
+/*清除自带样式*/
+body, h2, p {
+    margin: 0;
+    color: #999999;
+}
+
+a {
+    text-decoration: none;
+    color: #999999;
+}
+
+/*外层容器*/
+#container {
+    width: 990px;
+    margin: 0 auto;
+}
+
+/*顶部标题*/
+h2 {
+    font-weight: normal;
+    border-bottom: 1px solid #CCCCCC;
+    padding: 20px 0;
+    margin-bottom: 30px;
+}
+
+/*主体*/
+#main {
+    overflow: hidden;
+}
+
+/*左列*/
+#main .left {
+    float: left;
+    position: relative;
+}
+
+#main .left a {
+    position: absolute;
+    bottom: 20px;
+    left: 175px;
+    width: 145px;
+    height: 45px;
+    border: 1px solid #64a131;
+    text-align: center;
+    line-height: 45px;
+    border-radius: 5px;
+    color: #64a131;
+}
+
+/*右列*/
+#main .right {
+    float: right;
+    margin-top: 70px;
+    margin-right: 40px;
+}
+
+#main .form-line {
+    margin-bottom: 30px;
+}
+
+#main .form-line > p {
+    float: left;
+    width: 64px;
+    height: 40px;
+    text-align: right;
+    line-height: 40px;
+    margin-right: 40px;
+}
+
+.right .uinput {
+    width: 300px;
+    height: 34px;
+    padding: 1px 10px;
+    font-size: 16px;
+}
+
+/*第三列*/
+.form-line div p {
+    float: right;
+}
+
+.form-line div p a {
+    text-decoration: underline;
+}
+
+.form-line #savepwd {
+    width: 18px;
+    height: 18px;
+    vertical-align: top;
+    /*float: left;*/
+}
+
+/*第四行*/
+.form-line .btn {
+    width: 145px;
+    height: 40px;
+    background-color: #64a131;
+    color: white;
+    border: 1px solid #64a131;
+    border-radius: 5px;
+    font-size: 20px;
+}
+
+.form-line .registBtn {
+    box-sizing: border-box;
+    float: right;
+    color: #64a131;
+    background: #ffffff;
+    line-height: 40px;
+    text-align: center;
+    transition-delay: ;
+}

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<script>
+    // var a = [1, 2, 3, 4, 5, 6, 7, 8, 9, 0];
+    // var b = prompt("输入一个数字");
+    // if (b in a) {
+    //     console.log(b)
+    // } else {
+    //     console.log(-1)
+    // }
+
+    // 实现输入一个数字转换成 二进制返回
+    function decode2Bin() {
+        var num = prompt("请输入一个数字");
+        var arr = []; // 保存余数
+        while (num != 0) {
+            // 重复除2 取整
+            var r = num % 2;
+            arr.unshift(r);
+            num = parseInt(num / 2);
+        }
+        var str = arr.join("");
+        console.log(num + "的二进制为:", str);
+    }
+
+    // decode2Bin();
+
+    function changdu(len) {
+        var a = [1, "P", 3, "z", 5, "A", 7, "c", 9, 0];
+        var show = "";
+        for (var i = 0; i < len; i++) {
+
+            var index = parseInt(Math.random() * a.length);
+            show += a[index]
+        }
+        return show;
+    }
+
+
+    function yanzheng(a) {
+        var show = changdu(4);
+        var input = prompt("请输入4位验证码:" + show);
+        if (input.toUpperCase() === show.toUpperCase()) {
+            alert("输入正确")
+        } else {
+            alert("输入正确")
+        }
+    }
+
+    yanzheng()
+
+</script>
+</body>
+</html>

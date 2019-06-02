@@ -9,7 +9,6 @@
 内层循环
     小循环控制如歌得出这个最大值
         计算大小, 然后彼此交换
-
 """
 
 import random
@@ -18,9 +17,6 @@ import random
 基础版
 """
 
-
-
-sorted()
 
 def func(l):
     # 外层循环: 走访数据的次数

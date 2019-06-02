@@ -1,0 +1,52 @@
+<<python GUI 编程之 Tkinter>>
+
+什么是GUI
+    GUI 图形用户接口 采用图形方式显示的计算机操作界面
+
+GUI 的种类
+    Qt
+    GTK
+    MFC
+    Tkinter
+    pyQt
+
+tkinter 官网
+    http://effbot.org/tkinterbook/tkinter-index.htm
+
+导入
+    import tkinter
+    form tkinter import *
+
+运行启动流程
+    导入 tkinter 包
+    创建一个顶层窗口对象 用于容纳整个GUI应用
+    在顶层窗口对象之上(或其中) 构建所有的 GUI 组件
+    通过底层应用代码将这些 GUI 组件连接起来
+    进入主事件循环 mainloop
+
+首个tkinter程序
+    tkinter_hello.py
+
+tkinter 窗口控件(widget)
+    Lable   用于显示文字和图片信息
+    Button
+    Entry
+    Checkbutton
+    Listbox
+    ...
+    详见官网:
+
+Lable
+    用于显示文字和图片信息
+    图片仅支持 GIF PGM PPM 图片
+    属性      说明      类型
+    text    文字信息    str
+    bg      背景色     str
+    fg      前景色     str
+    width   宽(字符宽)  int
+    height  高(行)    int
+    image   图片      PhotoImage
+
+
+
+

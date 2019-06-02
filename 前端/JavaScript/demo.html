@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h1 onclick="caculateDate()">点击</h1>
+<script>
+    // for (var i = 1; i < 10; i++) {
+    //     var show = "";
+    //     for (var j = 1; j <= i; j++) {
+    //         show += i + "*" + j + "=" + i * j +"\t";
+    //
+    //     }
+    //     console.log(show)
+    // }
+</script>
+<script>
+    // var year = prompt("请输入年");
+    // var month = prompt("请输入月");
+    // var day = prompt("请输入日");
+    // var sum = 0;
+    // for (var i = 1990; i < year; i++) {
+    //     sum += 365;
+    //     if (i % 4 == 0 && i % 100 != 0 || i % 400 == 0) {
+    //         sum++;
+    //     }
+    // }
+    // for (var j = 1; j < month; j++) {
+    //     switch (j) {
+    //         case 1:
+    //         case 3:
+    //         case 5:
+    //         case 7:
+    //         case 8:
+    //         case 10:
+    //             sum += 31;
+    //             break;
+    //         case 4:
+    //         case 6:
+    //         case 9:
+    //         case 11:
+    //             sum += 30;
+    //             break;
+    //         case 2:
+    //             sum += 28;
+    //             if (year % 4 == 0 && year % 100 != 0 || year % 400 == 0) {
+    //                 sum++;
+    //             }
+    //             break;
+    //     }
+    // }
+    // // 累加当前月天数
+    // sum += day;
+    // // 对7 取余
+    // var week = sum % 7;
+    // var show = "";
+    // switch (week) {
+    //     case 0:
+    //         show = "星期日";
+    //         break;
+    //     case 1:
+    //         show = "星期一";
+    //         break;
+    //     case 2:
+    //         show = "星期二";
+    //         break;
+    //     case 3:
+    //         show = "星期三";
+    //         break;
+    //     case 4:
+    //         show = "星期四";
+    //         break;
+    //     case 5:
+    //         show = "星期五";
+    //         break;
+    //     case 6:
+    //         show = "星期六";
+    //         break;
+    // }
+    // console.log(show)
+
+</script>
+<script>
+    // 闰年判断
+    function isRun(year) {
+        var res = year % 4 == 0 && year % 100 != 0 || year % 400 == 0;
+        return res;
+    }
+
+    function caculateDate() {
+        var year = prompt("请输入年");
+        var month = prompt("请输入月");
+        var day = prompt("请输入日");
+        var sum = 0;
+        for (var i = 1990; i < year; i++) {
+            sum += 365;
+            if (isRun(i)) {
+                sum++;
+            }
+        }
+        for (var j = 1; j < month; j++) {
+            switch (j) {
+                case 1:
+                case 3:
+                case 5:
+                case 7:
+                case 8:
+                case 10:
+                    sum += 31;
+                    break;
+                case 4:
+                case 6:
+                case 9:
+                case 11:
+                    sum += 30;
+                    break;
+                case 2:
+                    sum += 28;
+                    if (isRun(year)) {
+                        sum++;
+                    }
+                    break;
+            }
+        }
+        sum += day;
+        var week = sum % 7;
+        var show = "";
+        switch (week) {
+            case 0:
+                show = "星期日";
+                break;
+            case 1:
+                show = "星期一";
+                break;
+            case 2:
+                show = "星期二";
+                break;
+            case 3:
+                show = "星期三";
+                break;
+            case 4:
+                show = "星期四";
+                break;
+            case 5:
+                show = "星期五";
+                break;
+            case 6:
+                show = "星期六";
+                break;
+        }
+        console.log(show)
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        body, ul, li, ol {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+
+        #nav {
+            width: 990px;
+            height: 30px;
+            margin: 0 auto;
+            background-color: gainsboro;
+            line-height: 30px;
+        }
+
+        #nav .right {
+            float: right;
+        }
+
+        #nav .right ul {
+            float: right;
+        }
+
+        #nav .right li {
+            float: left;
+            padding: 0 0 0 10px;
+        }
+
+        #nav .left ul > li {
+            float: left;
+            padding: 0 0 0 10px;
+
+        }
+
+        .left ol {
+            display: none;
+        }
+
+        .left .address:hover ol {
+            display: block;
+        }
+
+        .left i {
+            display: inline-block;
+            width: 0;
+            height: 0;
+            position: relative;
+            top: 3px;
+            border: 5px solid transparent;
+            border-top: 5px solid deepskyblue;
+        }
+
+
+    </style>
+</head>
+<body>
+<div id="nav">
+    <!--右侧导航-->
+    <div class="right">
+        <ul>
+            <li>导航 1</li>
+            <li>导航 2</li>
+            <li>导航 3</li>
+            <li>导航 4</li>
+            <li>导航 5</li>
+        </ul>
+    </div>
+
+
+    <!--左侧导航-->
+    <div class="left">
+        <ul>
+            <li class="address">
+                <span>首页</span>
+                <i></i>
+                <ol id="xiala">
+                    <li> 下拉 1</li>
+                    <li> 下拉 2</li>
+                    <li> 下拉 3</li>
+                </ol>
+            </li>
+
+            <li>导航 a</li>
+            <li>导航 b</li>
+            <li>导航 c</li>
+
+        </ul>
+    </div>
+
+</div>
+</body>
+</html>

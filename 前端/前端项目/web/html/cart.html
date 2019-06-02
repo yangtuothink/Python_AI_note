@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="../css/base.css">
+    <link rel="stylesheet" href="../css/cart.css">
+    <script src="../js/jquery-1.11.3.js"></script>
+    <script src="../js/cart.js"></script>
+</head>
+<body>
+<div id="container">
+    <div id="top">
+
+        <!--1.1 左布局 logo -->
+        <div id="logo">
+            <a href="index.html">
+                <img src="../images/header/logo.png">
+            </a>
+        </div>
+
+        <!--1.2 中布局 搜索框-->
+        <div id="search">
+            <input type="text" name="search" placeholder="请输入您要搜索内容">
+            <a href="javascript:void(0)">
+                <img src="../images/header/search.png" alt="">
+            </a>
+        </div>
+
+        <!--1.3 右布局 顶部导航 -->
+        <div id="top-nav">
+            <ul>
+                <li>
+                    <a href="">
+                        <img src="../images/header/care.png" alt="">
+                    </a>
+                </li>
+                <li>
+                    <b></b>
+                    <a href="">
+                        <img src="../images/header/order.png" alt="">
+                    </a>
+                </li>
+                <li>
+                    <b></b>
+                    <a href="">
+                        <img src="../images/header/shop_car.png" alt="">
+                    </a>
+                </li>
+                <li>
+                    <b></b>
+                    <a href="">帮助</a>
+                </li>
+                <li>
+                    <b></b>
+                    <a href="">登录</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div id="nav">
+        <ul>
+            <li>
+                <a href="index.html">首页</a>
+            </li>
+            <li>
+                <a href="">私人订制</a>
+            </li>
+        </ul>
+    </div>
+    <div id="main">
+        <h2>
+            购物车
+            <p>
+                已选择<span class="total-num">0</span>件商品&nbsp;&nbsp;&nbsp;
+                共计<span class="total-price">0.00 元</span>
+            </p>
+        </h2>
+        <div class="title">
+            <p class="check">
+                <img id="checkall" src="../images/cart/product_normal.png">
+                全选
+            </p>
+            <p class="goodsName">商品</p>
+            <p class="price">单价(元)</p>
+            <p class="count">数量</p>
+            <p class="sum">金额</p>
+            <p class="action">操作</p>
+        </div>
+        <div class="content">
+            <div class="item">
+                <p class="check">
+                    <img class="choose" src="../images/cart/product_normal.png">
+                </p>
+                <p class="goodsName">
+                    <img src="../images/cart/product_simg1.png">
+                    <span class="itemName">90分旅行箱,万向静音轮子</span><br>
+                    <span>颜色: 天空灰</span><br>
+                    <span>规格: 标准规格</span>
+                </p>
+                <p class="price">
+                    <span class="special">皮粉专享价</span>
+                    <span>¥388.00</span>
+                </p>
+                <p class="count">
+                    <a class="decrement" href="javascript:void(0)">-</a>
+                    <input type="text" name="count" value="1" readonly>
+                    <a class="increment" href="javascript:void(0)">+</a>
+                </p>
+                <p class="sum">¥388.00</p>
+                <p class="action">
+                    <a href="javascript:void(0)">删除</a>
+                </p>
+            </div>
+            <div class="item">
+                <p class="check">
+                    <img class="choose" src="../images/cart/product_normal.png">
+                </p>
+                <p class="goodsName">
+                    <img src="../images/cart/product_simg1.png">
+                    <span class="itemName">90分旅行箱,万向静音轮子</span><br>
+                    <span>颜色: 天空灰</span><br>
+                    <span>规格: 标准规格</span>
+                </p>
+                <p class="price">
+                    <span class="special">皮粉专享价</span>
+                    <span>¥388.00</span>
+                </p>
+                <p class="count">
+                    <a class="decrement" href="javascript:void(0)">-</a>
+                    <input type="text" name="count" value="1" readonly>
+                    <a class="increment" href="javascript:void(0)">+</a>
+                </p>
+                <p class="sum">¥388.00</p>
+                <p class="action">
+                    <a href="javascript:void(0)">删除</a>
+                </p>
+            </div>
+            <div class="item">
+                <p class="check">
+                    <img class="choose" src="../images/cart/product_normal.png">
+                </p>
+                <p class="goodsName">
+                    <img src="../images/cart/product_simg1.png">
+                    <span class="itemName">90分旅行箱,万向静音轮子</span><br>
+                    <span>颜色: 天空灰</span><br>
+                    <span>规格: 标准规格</span>
+                </p>
+                <p class="price">
+                    <span class="special">皮粉专享价</span>
+                    <span>¥388.00</span>
+                </p>
+                <p class="count">
+                    <a class="decrement" href="javascript:void(0)">-</a>
+                    <input type="text" name="count" value="1" readonly>
+                    <a class="increment" href="javascript:void(0)">+</a>
+                </p>
+                <p class="sum">¥388.00</p>
+                <p class="action">
+                    <a href="javascript:void(0)">删除</a>
+                </p>
+            </div>
+        </div>
+    </div>
+    <div id="footer">
+        <div>
+            <img src="../images/footer/icon1.png" alt="">
+            <p>品质保证</p>
+        </div>
+        <div>
+            <img src="../images/footer/icon2.png" alt="">
+            <p>私人订制</p>
+        </div>
+        <div>
+            <img src="../images/footer/icon3.png" alt="">
+            <p>羊驼特供</p>
+        </div>
+        <div>
+            <img src="../images/footer/icon4.png" alt="">
+            <p>专属特权</p>
+        </div>
+    </div>
+    <div id="bottom">
+        <div class="download">
+            <img src="../images/footer/erweima.png" alt="">
+        </div>
+        <div class="service">
+            <p>羊驼の商城客户端</p>
+            <img src="../images/footer/android.png" alt="">
+            <img src="../images/footer/ios.png" alt="">
+        </div>
+        <p id="footLogo">
+            <img src="../images/footer/logo.png">
+        </p>
+        <p id="footFont">
+            <img src="../images/footer/footerFont.png">
+        </p>
+    </div>
+</div>
+</body>
+</html>

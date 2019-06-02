@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="Generator" content="EditPlus®">
+    <meta name="Author" content="">
+    <meta name="Keywords" content="">
+    <meta name="Description" content="">
+    <title>Document</title>
+    <style>
+        table {
+            width: 600px;
+            margin: 30px 0;
+        }
+
+        table, th, td {
+            border: 1px solid black;
+        }
+    </style>
+    <Script src="index.js"></script>
+    <script>
+        function add() {
+            //获取输入框的值
+            var gname = $("input").value;
+            var gcount = $("input", 1).value;
+            var gprice = $("input", 2).value;
+            //获取父节点
+            var tbody = $("tbody");
+            //动态创建tr
+            var tr = document.createElement("tr");
+            //创建td
+            var tdName = document.createElement("td");
+            tdName.innerHTML = gname;
+            var tdCount = document.createElement("td");
+            tdCount.innerHTML = gcount;
+            var tdPrice = document.createElement("td");
+            tdPrice.innerHTML = gprice;
+            var tdOper = document.createElement("td");
+            tdOper.innerHTML = "<button>修改</button><button>移除</button>";
+            //添加
+            tr.appendChild(tdName);
+            tr.appendChild(tdCount);
+            tr.appendChild(tdPrice);
+            tr.appendChild(tdOper);
+            tbody.appendChild(tr);
+        }
+    </script>
+</head>
+<body>
+<div>
+    <input type="text" name="gname">
+    <input type="text" name="gcount">
+    <input type="text" name="gprice">
+    <input type="button" value="增加" onclick="add()">
+</div>
+<table>
+    <tbody>
+    <tr>
+        <th>商品名称</th>
+        <th>商品数量</th>
+        <th>商品价格</th>
+        <th>操作</th>
+    </tr>
+    </tbody>
+</table>
+
+</body>
+</html>

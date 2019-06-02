@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="Generator" content="EditPlus®">
+  <meta name="Author" content="">
+  <meta name="Keywords" content="">
+  <meta name="Description" content="">
+  <title>Document</title>
+  <script src="index.js"></script>
+ </head>
+ <body>
+	<input type="text">
+	<button onclick="validate()">验证</button>
+	<div></div>
+	<script>
+		function validate(){
+			//获取元素
+			var input = $("input");//外部JS中的函数
+			var div = $("div");
+			//获取用户名
+			var username = input.value;
+			//验证长度
+			if(username.length >= 6 && username.length <= 18){
+				div.innerHTML = "用户名合法";
+				div.style.color = "green";
+			}else{
+				div.innerHTML = "用户名不合法";
+				div.style.color = "red";
+			}
+
+
+		}
+
+
+	</script>
+
+ </body>
+</html>

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        #d0 {
+            width: 600px;
+            background-color: silver;
+            position: relative;
+            top: 200px;
+            left: 200px;
+        }
+
+        #d1 {
+            width: 200px;
+            height: 200px;
+            background-color: blueviolet;
+            position: relative;
+        }
+
+        #d2 {
+            width: 200px;
+            height: 200px;
+            background-color: deepskyblue;
+            position: absolute;
+            left: 100px;
+            top: 100px;
+        }
+
+        #d3 {
+            width: 200px;
+            height: 200px;
+            background-color: greenyellow;
+            position: relative;
+        }
+
+        #d1:hover {
+            z-index: 1;
+        }
+
+        #d2:hover {
+            z-index: 1;
+        }
+
+        #d3:hover {
+            z-index: 1;
+        }
+    </style>
+</head>
+<body>
+<div id="d0">
+    <div id="d1"></div>
+    <div id="d2"></div>
+    <div id="d3"></div>
+</div>
+
+</body>
+</html>

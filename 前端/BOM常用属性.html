@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script>
+        // function changeA() {
+        //     var ele = document.getElementsByTagName("a")[0];
+        //     ele.href = "https://www.baidu.com/";
+        // }
+        // 验证输入合法
+        function validate() {
+            var input = $("input");
+            var div = $("div");
+            // 获取输入内
+            var data = input.value;
+            if (data.length >= 6 && data.length <= 18) {
+                div.innerHTML = "用户名合法";
+                div.style.color = "green"
+            }
+            else {
+                div.innerHTML = "用户名合法";
+                div.style.color = "red"
+            }
+        }
+    </script>
+</head>
+<body>
+<a href="#">超链接</a>
+
+<button onclick="changeA()">获取访问数量</button>
+
+<input type="text">
+<button onclick="validate()">验证</button>
+<div></div>
+
+
+</body>
+</html>

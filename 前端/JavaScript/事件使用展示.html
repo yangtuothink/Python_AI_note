@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="index.js"></script>
+    <script>
+        window.onload = function () {
+            // 鼠标
+            // console.log($("h1"));
+            // $("h1").ondblclick = function () {
+            //     alert("双击")
+            // };
+            // $("div").onmouseover = function () {
+            //     console.log("鼠标移入")
+            // };
+            // $("div").onmousemove = function () {
+            //     console.log("鼠标移动呀动")
+            // };
+            // $("div").onmouseout = function () {
+            //     console.log("鼠标移出")
+            // };
+
+            // 键盘
+            // onkeydown = function () {
+            //     console.log("键盘被按")
+            // };
+            // onkeypress = function () {
+            //     console.log("字符被按")
+            // };
+            // onkeyup = function () {
+            //     console.log("松开了")
+            // };
+
+            // 表单
+            var form = $("form");
+            var uname = $("input");
+            var hobby = $("input", 1);
+
+            uname.onfocus = function () {
+                console.log("表单的获取焦点")
+            };
+            uname.onblur = function () {
+                // this 表示当前的触发对象
+                console.log("获取值: ", this.value)
+            };
+            uname.oninput = function () {
+                console.log("实时监听获取值: ", this.value)
+            };
+            uname.onchange = function () {
+                console.log("前后不一致了: ", this.value)
+            };
+            hobby.onchange = function () {
+                console.log("按钮变了: ", this.checked)
+            };
+            // onsubmit 事件由form 监听 , 点击提交按钮自动触发,
+            // 检测表单数据是否可以发生, 允许给出返回值为 布尔值
+            // true 表示可以提交, false 表示不可发送
+            form.onsubmit = function () {
+                if(uname.value.length == 0) {
+                    // 阻止提交
+                    return false;
+                } else {
+                    return true;
+                }
+            }
+
+        };
+    </script>
+    <style>
+        div {
+            width: 200px;
+            height: 200px;
+            background-color: palegreen;
+        }
+    </style>
+</head>
+<body>
+<h1>标题</h1>
+<div>文本啦文本</div>
+<form action="/" method="post" enctype="multipart/form-data">
+    用户名: <input type="text" name=""><br>
+    兴趣: <input type="checkbox" name="" value="1"><br>
+    <input type="submit">
+
+</form>
+
+
+<script>
+    console.log("我看看谁比我快")
+</script>
+
+</body>
+</html>

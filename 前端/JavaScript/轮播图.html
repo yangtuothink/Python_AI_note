@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        #banner {
+            width: 990px;
+            margin: 0 auto;
+        }
+
+        /*统一设置图片隐藏*/
+        img {
+            width: 990px;
+            height: 650px;
+            display: none;
+        }
+
+        /*匹配第一个图片显示*/
+        img:first-child {
+            display: block;
+        }
+
+    </style>
+    <script src="index.js"></script>
+</head>
+<body>
+<div id="banner">
+    <img src="b1.jpg" alt="">
+    <img src="b2.jpg" alt="">
+    <img src="b3.jpg" alt="">
+</div>
+<script>
+    var div = $("div");
+    var imgs = div.children;
+    var imgIndex = 0;
+
+    function autoPlay() {
+        // 先将图片隐藏
+        imgs[imgIndex].style.display = "none";
+
+        // 下标后移取图片
+        imgIndex++;
+        if (imgIndex == imgs.length) {
+            imgIndex = 0;
+        }
+
+        // 设置图片显示
+        imgs[imgIndex].style.display = "block"
+    }
+
+    setInterval(autoPlay, 1000)
+
+</script>
+</body>
+</html>
